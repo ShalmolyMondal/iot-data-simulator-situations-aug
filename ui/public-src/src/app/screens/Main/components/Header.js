@@ -95,6 +95,13 @@ export default class Header extends Component {
             handler: function(view) {
                 view.openSystemsPage();
             }
+        },
+        {
+            label: "Situation Project",
+            page: "systems",
+            handler: function(view) {
+                view.openSystemsPage();
+            }
         }
     ];
 

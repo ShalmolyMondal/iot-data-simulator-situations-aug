@@ -33,18 +33,19 @@ services:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS}
     ports:
-      - 5672:5672 
+      - 5672:5672
       - 15671:15671
       - 15672:15672
       - 61613:61613
   services:
     build: ./services
+    image: ibagroup/iot-data-simulator-services:1.1.0
     container_name: iot-ds-services
     depends_on:
       - mongodb
       - minio
       - rabbitmq
-      - data-sender  
+      - data-sender
     environment:
       - JAVA_OPTS=-Xmx3500m
       - MONGODB_URI=mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@mongodb:27017/admin
@@ -58,7 +59,7 @@ services:
       - RABBITMQ_PASS=${RABBITMQ_PASS}
       - SKIP_RULE_PROCESSING_FOR_EMPTY_DATASET_PROPERTY=true
       - SKIP_EMPTY_GENERATED_VALUES=true
-      - IMPORT_DEMO_SESSION=true 
+      - IMPORT_DEMO_SESSION=true
     ports:
       - 8083:8083
   ui:
@@ -87,7 +88,7 @@ services:
       - RABBITMQ_URL=amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672
       - AWS_IOT_SERVICE=iotdata
       #- DATA_SENDER_DEBUG_MODE=true
-     
+
 volumes:
   mongodb-data:
   minio-data:
