@@ -10,7 +10,8 @@
     "bundle:dev": "./node_modules/.bin/webpack --config webpack.config.js -d --progress --colors --env=development",
     "bundle:prod": "./node_modules/.bin/webpack --config webpack.config.js --env=production",
     "clean": "rm -rfv ../public/*",
-    "test": "npm run test"
+    "test": "npm run test",
+    "build:watch": "./node_modules/.bin/webpack --config webpack.config.js -d --progress --colors --env=development --watch"
   },
   "author": "Evgeny Sorokin",
   "license": "APACHE v2.0",

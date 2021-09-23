@@ -16,14 +16,14 @@ module.exports = {
         port: 9100,
         proxy: {
             "/ws/*": {
-                target: 'http://127.0.0.1:8090',
+                target: 'http://127.0.0.1:8070',
                 ws: true
             },
             "/**": {
-                target: 'http://127.0.0.1:8090'
+                target: 'http://127.0.0.1:8070'
             },
             "/api/**": {
-                target: 'http://127.0.0.1:8090'
+                target: 'http://127.0.0.1:8070'
             },
         }
     }

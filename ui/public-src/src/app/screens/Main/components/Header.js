@@ -97,10 +97,10 @@ export default class Header extends Component {
             }
         },
         {
-            label: "Situation Project",
-            page: "systems",
+            label: "Situations",
+            page: "situations",
             handler: function(view) {
-                view.openSystemsPage();
+                view.openSituationsPage();
             }
         }
     ];

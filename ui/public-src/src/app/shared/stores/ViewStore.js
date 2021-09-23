@@ -23,6 +23,8 @@ export default class ViewStore {
                 return "/devices";
             case "systems":
                 return "/systems";
+            case "situations":
+                return "/situations";
             default:
                 return "/404";
         }
@@ -51,6 +53,12 @@ export default class ViewStore {
         this.page = "systems";
         this.currentTab = 3;
         this.appStore.systemsScreenStore.load();
+    };
+
+    openSituationsPage = () => {
+        this.page = "situations";
+        this.currentTab = 4;
+        this.appStore.situationsScreenStore.load();
     };
 
     // Modals

@@ -7,7 +7,8 @@ export function createRouter(store) {
         "/sessions": view.openSessionsPage,
         "/definitions": view.openDefinitionsPage,
         "/devices": view.openDevicesPage,
-        "/systems": view.openSystemsPage
+        "/systems": view.openSystemsPage,
+        "/situations": view.openSituationsPage
     })
     router.configure({
         notfound: () => store.view.openSessionsPage(),

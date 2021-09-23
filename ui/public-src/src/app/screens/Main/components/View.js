@@ -11,6 +11,8 @@ import SessionsScreen from '../../Sessions';
 import DefinitionsScreen from '../../Definitions';
 import DevicesScreen from '../../Devices';
 import SystemsScreen from '../../Systems';
+import SituationsScreen from '../../Situations';
+
 
 const StyledView = glamorous.div({
     display: 'flex',
@@ -40,6 +42,8 @@ export default class View extends Component {
                 return <DevicesScreen />
             case 'systems': 
                 return <SystemsScreen />
+            case 'situations': 
+                return <SituationsScreen />
             default:
                 return <SessionsScreen />
         }
