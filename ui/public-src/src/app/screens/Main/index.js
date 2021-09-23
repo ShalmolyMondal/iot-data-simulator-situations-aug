@@ -36,7 +36,7 @@ const StyledMainScreen = glamorous.div({
     alignItems: "center",
     width: "100%",
     height: "100%",
-    background: "white"
+    background: "#fff"
 });
 
 const InnerContainerLayout = glamorous.div({
@@ -51,21 +51,27 @@ const InnerContainerLayout = glamorous.div({
 @inject("store")
 @observer
 export default class MainScreen extends Component {
+    state;
     constructor(props) {
         super(props);
-        console.log("========",props)
-        console.log("=Location=",window.location.pathname)
-
+        this.state = {
+            situationScreen: this.props.store.view.page == "situations" ? true : false
+        }
+        
     }
+
     render() {
         return (
-            <StyledMainScreen>
+            <StyledMainScreen className="test">
                 <InnerContainerLayout>
-                    <Header />
-                    <View />
+                    {
+                        !this.state.situationScreen && 
+                        <Header className="header-iot-ds"/>
+                    }
+                    <View 
+                        bgColor={this.state.situationScreen ? "#fff" : "#d9d9d9"}
+                    />
                 </InnerContainerLayout>
-
-                 
 
                 <CreateDefinitionModal />
                 <EditDefinitionModal />

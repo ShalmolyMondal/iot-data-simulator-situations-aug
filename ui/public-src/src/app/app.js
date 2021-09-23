@@ -41,17 +41,10 @@ reaction(
 );
 
 class App extends Component {
-    componentDidUpdate(prevProps) {
-        console.log("------I'm inside componentDid");
-        if (this.props.location !== prevProps.location) {
-          this.onRouteChanged();
-        }
-      }
-      onRouteChanged() {
-        console.log("ROUTE CHANGED");
-        console.log("====Props Location===",this.props.location);
-      }
+    
     render() {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        console.log(window.location)
         return (
             <MuiThemeProvider theme={styles.theme}>
                 <ThemeProvider theme={styles.theme}>

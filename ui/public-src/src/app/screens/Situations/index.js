@@ -4,14 +4,18 @@ import glamorous from "glamorous";
 import { css } from 'glamor';
 
 import ViewLayout from 'components/ViewLayout';
+import ControlPanel from '../Main/components/system/ControlPanel';
+import CbtLayout from "../../shared/components/CbtLayout";
 
-export default class SystemsScreen extends Component {
+export default class SituationScreen extends Component {
     constructor(props) {
         super(props);
     }
     render() {
         return (
-            <ViewLayout />
+            <CbtLayout
+                controlPanel={<ControlPanel />}
+            />
         )
     }
 }

@@ -3,12 +3,15 @@ import targetSystemFactory from "models/system/factory";
 
 export default class SituationsScreenStore {
     appStore;
+    consoleExpandedSize = 400;
+    consoleCollapsedSize = 78;
 
-    constructor(appStore) {
+
+    constructor(appStore) { 
         this.appStore = appStore;
+        // this.consoleSize = this.consoleCollapsedSize;
     }
 
-    @action.bound
     load() {
         this.appStore.situationsStore.getAll();
     }

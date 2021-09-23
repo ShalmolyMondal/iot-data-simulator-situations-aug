@@ -21,8 +21,7 @@ const StyledView = glamorous.div({
     width: '100%',
     padding: '0',
     alignItems: 'baseline',
-    backgroundColor: '#d9d9d9'
-});
+    backgroundColor: "#fff"});
 
 @inject("store") @observer
 export default class View extends Component {

@@ -97,7 +97,7 @@ export default class Header extends Component {
             }
         },
         {
-            label: "Situations",
+            label: "Situations test",
             page: "situations",
             handler: function(view) {
                 view.openSituationsPage();
