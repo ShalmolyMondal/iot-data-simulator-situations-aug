@@ -13,7 +13,7 @@ export default class SituationStore {
     }
 
     getAll() {
-        console.log('...loading devices');
+        console.log('...loading situation');
         return null;
         return this.appStore.transportLayer.get('/api/devices')
             .then(({ data = [] }) => {

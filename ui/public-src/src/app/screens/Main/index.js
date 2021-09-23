@@ -57,7 +57,13 @@ export default class MainScreen extends Component {
         this.state = {
             situationScreen: this.props.store.view.page == "situations" ? true : false
         }
-        
+    }
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        alert('propschanged')
+        if (this.props.userID !== prevProps.userID) {
+          this.fetchData(this.props.userID);
+        }
     }
 
     render() {
