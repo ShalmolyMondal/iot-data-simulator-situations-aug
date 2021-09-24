@@ -19,6 +19,17 @@ import { mainListItems, secondaryListItems } from './listItems';
 import AddButton from '../AddButton';
 import { FAKE_DATA } from '../../constants/fakeData';
 
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+
+import SettingsIcon from '@material-ui/icons/Settings';
+import DvrIcon from '@material-ui/icons/Dvr';
+import View from '../../../screens/Main/components/View';
+
 
 const drawerWidth = 240;
 
@@ -102,6 +113,7 @@ const styles = theme => ({
 class CbtLayout extends React.Component {
   state = {
     open: true,
+    selected: 0
   };
 
   handleDrawerOpen = () => {
@@ -139,7 +151,7 @@ class CbtLayout extends React.Component {
                 IOT PROJECT
               </Typography>
               <IconButton color="inherit">
-                    
+
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -151,25 +163,26 @@ class CbtLayout extends React.Component {
             open={this.state.open}
           >
             <div className={classes.toolbarIcon}>
-                <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
-                <IconButton onClick={this.handleDrawerClose}>
-                    <ChevronLeftIcon />
-                </IconButton>
+              <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
+              <IconButton onClick={this.handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
             </div>
             <Divider />
             <List>{mainListItems()}</List>
             <Divider />
             <List>{secondaryListItems}</List>
+
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            {/* {this.props.page} */}
-            {
+            {this.props.page}
+            {/* {
               !FAKE_DATA.situations && (
-              <AddButton><AddIcon/> Add New Situation</AddButton>           
+                <AddButton><AddIcon /> Add New Situation</AddButton>
               )
-            }
-            
+            } */}
+
           </main>
         </div>
       </React.Fragment>

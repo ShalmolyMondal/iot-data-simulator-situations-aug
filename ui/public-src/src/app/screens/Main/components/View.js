@@ -12,6 +12,11 @@ import DefinitionsScreen from '../../Definitions';
 import DevicesScreen from '../../Devices';
 import SystemsScreen from '../../Systems';
 import SituationsScreen from '../../Situations';
+import SituationAddScreen from '../../Situations/SituationAddScreen';
+import SituationDetailScreen from '../../Situations/SituationDetailScreen';
+import SituationManageScreen from '../../Situations/SituationManageScreen';
+
+
 
 
 const StyledView = glamorous.div({
@@ -44,11 +49,11 @@ export default class View extends Component {
             case 'situations': 
                 return <SituationsScreen />
             case 'add-situations': 
-                return <SituationsScreen />
+                return <SituationAddScreen />
             case 'situations-detail': 
-                return <SituationsScreen />
+                return <SituationDetailScreen />
             case 'manage-situations': 
-                return <SituationsScreen />
+                return <SituationManageScreen />
             case 'run-simulation': 
                 return <SituationsScreen />
             default:

@@ -36,6 +36,11 @@ import SessionsScreenStore from "stores/screen/SessionsScreenStore";
 import SituationsScreenStore from "stores/screen/SituationsScreenStore";
 import SituationsStore from "./situation/SituationsStore";
 
+import SituationAddStore from "stores/situation/SituationAddStore";
+import SituationDetailStore from "stores/situation/SituationDetailStore";
+import SituationManageStore from "stores/situation/SituationManageStore";
+
+
 import StompQueryManager from "api/stomp/stompQueryManager";
 import StompSubscriptionManager from "api/stomp/stompSubscriptionManager";
 import SessionsApiQueryManager from "api/sessionsApiQueryManager";
@@ -304,6 +309,10 @@ export default class AppStore {
         // Situations
         this.situationsScreenStore = new SituationsScreenStore(this);
         this.situationsStore = new SituationsStore();
+
+        this.situationAddStore = new SituationAddStore();
+        this.SituationDetailStore = new SituationDetailStore();
+        this.SituationManageStore = new SituationManageStore();
 
         // For debugging!
         window.___app = this;
