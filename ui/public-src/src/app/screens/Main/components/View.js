@@ -15,6 +15,7 @@ import SituationsScreen from '../../Situations';
 import SituationAddScreen from '../../Situations/SituationAddScreen';
 import SituationDetailScreen from '../../Situations/SituationDetailScreen';
 import SituationManageScreen from '../../Situations/SituationManageScreen';
+import SimulationRunScreen from '../../Situations/SimulationRunScreen';
 
 
 
@@ -48,14 +49,14 @@ export default class View extends Component {
                 return <SystemsScreen />
             case 'situations': 
                 return <SituationsScreen />
-            case 'add-situations': 
+            case 'add-situation': 
                 return <SituationAddScreen />
-            case 'situations-detail': 
+            case 'situation-detail': 
                 return <SituationDetailScreen />
-            case 'manage-situations': 
+            case 'manage-situation': 
                 return <SituationManageScreen />
             case 'run-simulation': 
-                return <SituationsScreen />
+                return <SimulationRunScreen />
             default:
                 return <SessionsScreen />
         }

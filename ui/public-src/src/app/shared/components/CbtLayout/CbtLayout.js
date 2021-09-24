@@ -194,27 +194,29 @@ class CbtLayout extends React.Component {
             <div className={classes.appBarSpacer} />
             <div className={classes.appBarSpacer} />
             {/* {this.props.page} */}
-            <Grid
+            {this.props.page == "add-situation"  &&
+              <Grid
                 container
                 spacing={0}
                 direction="column"
                 alignItems="center"
                 justify="center"
-            >
+              >
                 <div className={classes.noContentText}>No situation to display</div>
-                <Button color="primary" variant="contained"  className={classes.button} onClick={this.openAddEditSituationModal}>
-                    <AddIcon /> Add situaiton
+                <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
+                  <AddIcon /> Add situaiton
                 </Button>
-            </Grid>
+              </Grid>
+            }
           </main>
         </div>
         {
-            <AddEditSituationModalWrapped
-                modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
-                open={this.state.openModal}
-                closeModal={this.closeAddEditSituationModal}
-            >
-            </AddEditSituationModalWrapped>
+          <AddEditSituationModalWrapped
+            modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
+            open={this.state.openModal}
+            closeModal={this.closeAddEditSituationModal}
+          >
+          </AddEditSituationModalWrapped>
         }
       </React.Fragment>
     );

@@ -11,12 +11,13 @@ import AddIcon from '@material-ui/icons/Add';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DvrIcon from '@material-ui/icons/Dvr';
 import { FAKE_DATA } from '../../constants/fakeData';
+import ViewStore from '../../stores/ViewStore';
 // import FAKE_DATA from '../../constants/fakeData';
 
 export const mainListItems = () => {
     console.log(FAKE_DATA.situations)
     return <div>
-        <ListItem button>
+        <ListItem button onClick={()=> window.location.pathname = "situations"}>
             <ListItemIcon>
                 <DashboardIcon />
             </ListItemIcon>
@@ -38,19 +39,19 @@ export const mainListItems = () => {
 export const secondaryListItems = (
   <div>
     <ListSubheader inset>Actions</ListSubheader>
-    <ListItem button>
+    <ListItem button onClick={()=> window.location.pathname = "manage-situation"}>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary="Manage Situations" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={()=> window.location.pathname = "add-situation"}>
       <ListItemIcon>
         <AddIcon />
       </ListItemIcon>
       <ListItemText primary="Add Situations" />
     </ListItem>
-    <ListItem button>
+    <ListItem button onClick={()=> window.location.pathname = "run-simulation"}>
       <ListItemIcon>
         <DvrIcon />
       </ListItemIcon>
