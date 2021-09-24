@@ -73,7 +73,7 @@ class StompConnectionProvider {
                         reject(error);
                     }
 
-                    this.reconnect();
+                    // this.reconnect();
                 }
             );
 

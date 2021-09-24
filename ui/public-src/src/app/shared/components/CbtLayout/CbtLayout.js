@@ -15,12 +15,19 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClearIcon from '@material-ui/icons/Clear';
 import { mainListItems, secondaryListItems } from './listItems';
+import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituationModal';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import AddIcon from '@material-ui/icons/Add';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
     display: 'flex',
+  },
+  gridroot: {
+    flexGrow: 1,
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -86,6 +93,8 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
     height: '100vh',
     overflow: 'auto',
+    background: '#FBFCFD',
+    width: 'calc(100vw - 240px)'
   },
   chartContainer: {
     marginLeft: -22,
@@ -93,12 +102,32 @@ const styles = theme => ({
   tableContainer: {
     height: 320,
   },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+  noContentText: {
+    fontSize: '24px',
+    color: '#757575'
+  }
 });
 
 class CbtLayout extends React.Component {
   state = {
     open: true,
+    openModal: false,
+    addEditSituationModalMode: "ADD_MODE"
   };
+
+  closeAddEditSituationModal = () => {
+    this.setState({ openModal: false });
+  }
+
+  openAddEditSituationModal = () => {
+    this.setState({ openModal: true });
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -159,9 +188,32 @@ class CbtLayout extends React.Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            {this.props.page}
+            <div className={classes.appBarSpacer} />
+            <div className={classes.appBarSpacer} />
+            <div className={classes.appBarSpacer} />
+            {/* {this.props.page} */}
+            <Grid
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justify="center"
+            >
+                <div className={classes.noContentText}>No situation to display</div>
+                <Button color="primary" variant="contained"  className={classes.button} onClick={this.openAddEditSituationModal}>
+                    <AddIcon /> Add situaiton
+                </Button>
+            </Grid> 
           </main>
         </div>
+        {
+            <AddEditSituationModalWrapped
+                modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
+                open={this.state.openModal}
+                closeModal={this.closeAddEditSituationModal}
+            >
+            </AddEditSituationModalWrapped>
+        }
       </React.Fragment>
     );
   }
