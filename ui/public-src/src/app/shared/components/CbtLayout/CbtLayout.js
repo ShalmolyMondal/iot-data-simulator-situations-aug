@@ -25,10 +25,13 @@ const styles = theme => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
+  sidebarHeader: {
+    marginLeft: '20px'
+  },
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
@@ -129,10 +132,10 @@ class CbtLayout extends React.Component {
                 <MenuIcon />
               </IconButton>
               <Typography variant="title" color="inherit" noWrap className={classes.title}>
-                Situations
+                IOT PROJECT
               </Typography>
               <IconButton color="inherit">
-                    <ClearIcon />
+                    
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -144,20 +147,19 @@ class CbtLayout extends React.Component {
             open={this.state.open}
           >
             <div className={classes.toolbarIcon}>
-              <IconButton onClick={this.handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
+                <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
+                <IconButton onClick={this.handleDrawerClose}>
+                    <ChevronLeftIcon />
+                </IconButton>
             </div>
             <Divider />
-            <List>{mainListItems}</List>
+            <List>{mainListItems()}</List>
             <Divider />
             <List>{secondaryListItems}</List>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            <Typography variant="display1" gutterBottom>
-              Orders
-            </Typography>
+            {this.props.page}
           </main>
         </div>
       </React.Fragment>

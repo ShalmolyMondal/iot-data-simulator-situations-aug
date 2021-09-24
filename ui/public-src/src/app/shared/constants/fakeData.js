@@ -17,6 +17,6 @@ const situations = [
     }
 ]
 
-export default FAKE_DATA = {
+export const FAKE_DATA = {
     situations: situations
 }

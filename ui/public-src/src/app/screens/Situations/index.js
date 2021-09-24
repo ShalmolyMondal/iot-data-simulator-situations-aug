@@ -7,14 +7,17 @@ import ViewLayout from 'components/ViewLayout';
 import ControlPanel from '../Main/components/system/ControlPanel';
 import CbtLayout from "../../shared/components/CbtLayout";
 
+@inject("store")
+@observer
 export default class SituationScreen extends Component {
     constructor(props) {
         super(props);
     }
     render() {
+        console.log(this.props.store)
         return (
             <CbtLayout
-                controlPanel={<ControlPanel />}
+                page={this.props.store.view.page}
             />
         )
     }
