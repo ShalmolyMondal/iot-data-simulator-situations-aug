@@ -25,6 +25,14 @@ export default class ViewStore {
                 return "/systems";
             case "situations":
                 return "/situations";
+            case "add-situation":
+                return "/add-situation";
+            case "situation-detail":
+                return "/situation-detail";
+            case "manage-situation":
+                return "/manage-situation";
+            case "run-simulation":
+                return "/run-simulation";
             default:
                 return "/404";
         }

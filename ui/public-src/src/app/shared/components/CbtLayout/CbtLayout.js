@@ -12,14 +12,29 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClearIcon from '@material-ui/icons/Clear';
 import { mainListItems, secondaryListItems } from './listItems';
+import AddButton from '../AddButton';
+import { FAKE_DATA } from '../../constants/fakeData';
+
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+
+import SettingsIcon from '@material-ui/icons/Settings';
+import DvrIcon from '@material-ui/icons/Dvr';
+import View from '../../../screens/Main/components/View';
+
+
 import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituationModal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
-
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -118,7 +133,8 @@ class CbtLayout extends React.Component {
   state = {
     open: true,
     openModal: false,
-    addEditSituationModalMode: "ADD_MODE"
+    addEditSituationModalMode: "ADD_MODE",
+    selected: 0
   };
 
   closeAddEditSituationModal = () => {
@@ -164,7 +180,7 @@ class CbtLayout extends React.Component {
                 IOT PROJECT
               </Typography>
               <IconButton color="inherit">
-                    
+
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -176,18 +192,20 @@ class CbtLayout extends React.Component {
             open={this.state.open}
           >
             <div className={classes.toolbarIcon}>
-                <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
-                <IconButton onClick={this.handleDrawerClose}>
-                    <ChevronLeftIcon />
-                </IconButton>
+              <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
+              <IconButton onClick={this.handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
             </div>
             <Divider />
             <List>{mainListItems()}</List>
             <Divider />
             <List>{secondaryListItems}</List>
+
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
+            {this.props.page}
             <div className={classes.appBarSpacer} />
             <div className={classes.appBarSpacer} />
             <div className={classes.appBarSpacer} />
@@ -204,6 +222,12 @@ class CbtLayout extends React.Component {
                     <AddIcon /> Add situaiton
                 </Button>
             </Grid> 
+            {/* {
+              !FAKE_DATA.situations && (
+                <AddButton><AddIcon /> Add New Situation</AddButton>
+              )
+            } */}
+
           </main>
         </div>
         {
