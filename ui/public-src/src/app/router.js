@@ -8,8 +8,13 @@ export function createRouter(store) {
         "/definitions": view.openDefinitionsPage,
         "/devices": view.openDevicesPage,
         "/systems": view.openSystemsPage,
-        "/situations": view.openSituationsPage,
-        "/situation-detail": view.openSituationDetailPage
+        "/add-situation": view.openSituationsPage,
+        "/situation-detail": view.openSituationsPage,
+        "/manage-situation": view.openSituationsPage,
+        "/run-situation": view.openSituationsPage,
+        "/situations": view.openSituationsPage
+        
+
     })
     router.configure({
         notfound: () => store.view.openSessionsPage(),

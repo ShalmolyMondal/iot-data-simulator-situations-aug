@@ -12,9 +12,13 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
+import AddIcon from '@material-ui/icons/Add';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClearIcon from '@material-ui/icons/Clear';
 import { mainListItems, secondaryListItems } from './listItems';
+import AddButton from '../AddButton';
+import { FAKE_DATA } from '../../constants/fakeData';
+
 
 const drawerWidth = 240;
 
@@ -159,7 +163,13 @@ class CbtLayout extends React.Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            {this.props.page}
+            {/* {this.props.page} */}
+            {
+              !FAKE_DATA.situations && (
+              <AddButton><AddIcon/> Add New Situation</AddButton>           
+              )
+            }
+            
           </main>
         </div>
       </React.Fragment>

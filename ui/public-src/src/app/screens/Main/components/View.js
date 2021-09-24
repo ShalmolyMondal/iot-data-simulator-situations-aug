@@ -43,6 +43,14 @@ export default class View extends Component {
                 return <SystemsScreen />
             case 'situations': 
                 return <SituationsScreen />
+            case 'add-situations': 
+                return <SituationsScreen />
+            case 'situations-detail': 
+                return <SituationsScreen />
+            case 'manage-situations': 
+                return <SituationsScreen />
+            case 'run-simulation': 
+                return <SituationsScreen />
             default:
                 return <SessionsScreen />
         }
