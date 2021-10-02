@@ -19,6 +19,9 @@ import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituat
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -101,6 +104,7 @@ const styles = theme => ({
   tableContainer: {
     height: 320,
   },
+  // main content
   button: {
     margin: theme.spacing.unit,
   },
@@ -110,7 +114,11 @@ const styles = theme => ({
   noContentText: {
     fontSize: '24px',
     color: '#757575'
-  }
+  },
+  card: {
+    minWidth: 275,
+    minHeight: 'calc(100vh - 120px)'
+  },
 });
 
 class CbtLayout extends React.Component {
@@ -185,27 +193,29 @@ class CbtLayout extends React.Component {
             <List>{mainListItems()}</List>
             <Divider />
             <List>{secondaryListItems}</List>
-
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            {this.props.page}
-            <div className={classes.appBarSpacer} />
-            <div className={classes.appBarSpacer} />
-            <div className={classes.appBarSpacer} />
-            {/* {this.props.page} */}
-            <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-            >
-                <div className={classes.noContentText}>No situation to display</div>
-                <Button color="primary" variant="contained"  className={classes.button} onClick={this.openAddEditSituationModal}>
-                    <AddIcon /> Add situaiton
-                </Button>
-            </Grid>
+            <Card className={classes.card}>
+                <CardContent>
+                    <div className={classes.appBarSpacer} />
+                    <div className={classes.appBarSpacer} />
+                    <div className={classes.appBarSpacer} />
+                    {/* {this.props.page} */}
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justify="center"
+                    >
+                        <div className={classes.noContentText}>No situation to display</div>
+                        <Button color="primary" variant="contained"  className={classes.button} onClick={this.openAddEditSituationModal}>
+                            <AddIcon /> Add situaiton
+                        </Button>
+                    </Grid>
+                </CardContent>
+            </Card>
           </main>
         </div>
         {
