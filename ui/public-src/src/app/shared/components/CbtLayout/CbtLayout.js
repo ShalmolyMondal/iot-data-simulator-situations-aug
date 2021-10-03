@@ -20,6 +20,9 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
+
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
@@ -107,6 +110,7 @@ const styles = theme => ({
   tableContainer: {
     height: 320,
   },
+  // main content
   button: {
     margin: theme.spacing.unit,
   },
@@ -116,7 +120,11 @@ const styles = theme => ({
   noContentText: {
     fontSize: '24px',
     color: '#757575'
-  }
+  },
+  card: {
+    minWidth: 275,
+    minHeight: 'calc(100vh - 120px)'
+  },
 });
 
 class CbtLayout extends React.Component {
@@ -195,6 +203,7 @@ class CbtLayout extends React.Component {
             <Divider />
             <List>{mainListItems(this.props)}</List>
             <Divider />
+
             <List>{secondaryListItems(this.props)}</List>
 
           </Drawer>
