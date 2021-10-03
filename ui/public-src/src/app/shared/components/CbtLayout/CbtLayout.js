@@ -19,6 +19,12 @@ import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituat
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+
+import { FAKE_DATA } from '../../constants/fakeData';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -114,6 +120,11 @@ const styles = theme => ({
 });
 
 class CbtLayout extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("11111111111111111", props)
+  }
+
   state = {
     open: true,
     openModal: false,
@@ -139,7 +150,7 @@ class CbtLayout extends React.Component {
 
   render() {
     const { classes } = this.props;
-
+   
     return (
       <React.Fragment>
         <CssBaseline />
@@ -182,39 +193,108 @@ class CbtLayout extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <List>{mainListItems()}</List>
+            <List>{mainListItems(this.props)}</List>
             <Divider />
-            <List>{secondaryListItems}</List>
+            <List>{secondaryListItems(this.props)}</List>
 
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             {this.props.page}
-            <div className={classes.appBarSpacer} />
-            <div className={classes.appBarSpacer} />
-            <div className={classes.appBarSpacer} />
+
             {/* {this.props.page} */}
-            <Grid
+            {this.props.page == "add-situation" &&
+              <Grid
                 container
                 spacing={0}
                 direction="column"
                 alignItems="center"
                 justify="center"
-            >
+              >
+                <div className={classes.appBarSpacer} />
+                <div className={classes.appBarSpacer} />
+                <div className={classes.appBarSpacer} />
                 <div className={classes.noContentText}>No situation to display</div>
-                <Button color="primary" variant="contained"  className={classes.button} onClick={this.openAddEditSituationModal}>
-                    <AddIcon /> Add situaiton
+                <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
+                  <AddIcon /> Add situaiton
                 </Button>
-            </Grid>
+              </Grid>
+            }
+
+            {
+              this.props.page == "situations" &&
+              <Grid
+                container
+                spacing={16}
+                direction="row"
+                alignItems="center"
+                justify="flex-start"
+              >
+                {FAKE_DATA.situations && FAKE_DATA.situations.map((situations, id) => {
+                  return (
+                    <Grid item id={id}>
+                      <Card >
+                        <CardContent>
+                          <NotificationsIcon alignItems=""/>
+                          <Typography variant="h4" component="div">
+                            {situations.name}
+                          </Typography>
+                          <Typography variant="body2">
+                            {situations.active ? "Active" : "Inactive"}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  )
+                })}
+
+              </Grid>
+            }
+
+            {
+              this.props.page == "manage-situation" &&
+              <Grid
+                container
+                spacing={16}
+                direction="row"
+                alignItems="center"
+                justify="flex-start"
+              >
+                {FAKE_DATA.situations && FAKE_DATA.situations.map((situations, id) => {
+                  return (
+
+                    <Grid item id={id}>
+
+                      <Card >
+                        <Button>
+                          <CardContent>
+                            <NotificationsIcon />
+                            <Typography variant="h4" component="div">
+                              {situations.name}
+                            </Typography>
+                            <Typography variant="body2">
+                              {situations.active ? "Active" : "Inactive"}
+                            </Typography>
+                          </CardContent>
+                        </Button>
+                      </Card>
+
+                    </Grid>
+
+                  )
+                })}
+
+              </Grid>
+            }
           </main>
         </div>
         {
-            <AddEditSituationModalWrapped
-                modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
-                open={this.state.openModal}
-                closeModal={this.closeAddEditSituationModal}
-            >
-            </AddEditSituationModalWrapped>
+          <AddEditSituationModalWrapped
+            modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
+            open={this.state.openModal}
+            closeModal={this.closeAddEditSituationModal}
+          >
+          </AddEditSituationModalWrapped>
         }
       </React.Fragment>
     );
