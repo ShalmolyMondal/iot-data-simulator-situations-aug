@@ -2,19 +2,15 @@ const router = require("express").Router();
 const Situation = require('../../models/Situation');
 
 // '/api/situation/create' route
-router.post('/', (req, res) => {
-    const situation = new Situation({
-        title: req.body.title,
-        description: req.body.description,
-    });
+router.post('/', async (req, res) => {
+    const situation = new Situation(req.body.situationData);
     
-    situation.save()
-        .then(data => {
-            res.status(201).json(data);
-        })
-        .catch(err => {
-            res.json({message: err})
-        })
+    try {
+        const situationCreated = await situation.save();
+        res.status(201).json(situationCreated);
+    } catch (err) {
+        res.status(500).json({message: err});
+    }
 });
 
 module.exports = router;

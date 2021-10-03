@@ -2,10 +2,11 @@ const router = require("express").Router();
 const Situation = require("../../models/Situation");
 
 
-router.get('/', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const situations = await Situation.find();
-        res.json(situations);
+        const id = req.params.id;
+        const situation = await Situation.findById(id);
+        res.json(situation);
     } catch (err) {
         res.json({message: err});
     }

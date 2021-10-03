@@ -1,18 +1,16 @@
 const mongoose = require('mongoose');
+const ContextAttributesSchema = require('./ContextAttributes');
 
 const SituationSchema = mongoose.Schema({
-    title: {
+    situation_name: {
         type: String,
         required: true
     },
-    description: {
+    situation_description: {
         type: String,
         required: true
     },
-    date: {
-        type: Date,
-        default: Date.now
-    },
+    context_attributes: [ContextAttributesSchema],
 });
 
 module.exports = mongoose.model('Situations', SituationSchema);
