@@ -9,11 +9,10 @@ import CbtLayout from "../../shared/components/CbtLayout";
 
 @inject("store")
 @observer
-export default class SituationAddScreen extends Component {
+export default class SimulationRunScreen extends Component {
     constructor(props) {
         super(props);
     }
-    
     render() {
         console.log(this.props.store)
         return (

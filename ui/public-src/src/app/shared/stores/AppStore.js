@@ -39,6 +39,8 @@ import SituationsStore from "./situation/SituationsStore";
 import SituationAddStore from "stores/situation/SituationAddStore";
 import SituationDetailStore from "stores/situation/SituationDetailStore";
 import SituationManageStore from "stores/situation/SituationManageStore";
+import SimulationRunStore from "stores/situation/SimulationRunStore";
+
 
 
 import StompQueryManager from "api/stomp/stompQueryManager";
@@ -308,11 +310,13 @@ export default class AppStore {
 
         // Situations
         this.situationsScreenStore = new SituationsScreenStore(this);
-        this.situationsStore = new SituationsStore();
+        this.situationsStore = new SituationsStore(this);
 
-        this.situationAddStore = new SituationAddStore();
-        this.SituationDetailStore = new SituationDetailStore();
-        this.SituationManageStore = new SituationManageStore();
+        this.situationAddStore = new SituationAddStore(this);
+        this.SituationDetailStore = new SituationDetailStore(this);
+        this.SituationManageStore = new SituationManageStore(this);
+        this.SimulationRunStore = new SimulationRunStore(this);
+
 
         // For debugging!
         window.___app = this;

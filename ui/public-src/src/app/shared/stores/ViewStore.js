@@ -69,6 +69,30 @@ export default class ViewStore {
         this.appStore.situationsScreenStore.load();
     };
 
+    openSituationAddPage = () => {
+        this.page = "add-situation";
+        // this.currentTab = 5;
+        // this.appStore.situationAddStore.load();
+    };
+
+    openSituationDetailPage = () => {
+        this.page = "situation-detail";
+        // this.currentTab = 6;
+        // this.appStore.situationDetailStore.load();
+    };
+
+    openSituationManagePage = () => {
+        this.page = "manage-situation";
+        // this.currentTab = 7;
+        // this.appStore.situationManageStore.load();
+    };
+
+    openSimulationRunPage = () => {
+        this.page = "run-simulation";
+        // this.currentTab = 7;
+        // this.appStore.situationManageStore.load();
+    };
+
     // Modals
     openCreateDefinition = () => {
         let { definitionModalStore, datasetsStore } = this.appStore;
