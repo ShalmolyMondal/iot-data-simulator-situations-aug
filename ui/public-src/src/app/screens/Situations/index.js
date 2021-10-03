@@ -28,11 +28,11 @@ export default class SituationScreen extends Component {
               danger: 'orange',
             },
           });
-        console.log(this.props.store)
         return (
             <MuiThemeProvider theme={theme}>
                 <CbtLayout
                     page={this.props.store.view.page}
+                    {...this.props}
                 />
             </MuiThemeProvider>
         )

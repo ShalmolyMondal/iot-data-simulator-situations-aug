@@ -18,6 +18,7 @@ export default class SituationManageScreen extends Component {
         return (
             <CbtLayout
                 page={this.props.store.view.page}
+                {...this.props}
             />
         )
     }

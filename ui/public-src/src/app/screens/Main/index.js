@@ -56,7 +56,7 @@ export default class MainScreen extends Component {
         super(props);
         this.state = {
             situationScreen: this.props.store.view.page == "situations" || this.props.store.view.page == "add-situation" || this.props.store.view.page == "situation-detail" 
-            || this.props.store.view.page == "manage-situation" || this.props.store.view.page == "run-simulation"? true : false
+            || this.props.store.view.page == "manage-situation" || this.props.store.view.page == "run-simulation" ? true : false
         }
     }
     componentDidUpdate(prevProps) {
