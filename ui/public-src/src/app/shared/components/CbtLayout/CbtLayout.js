@@ -23,7 +23,6 @@ import Card from '@material-ui/core/Card';
 
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import { FAKE_DATA } from '../../constants/fakeData';
