@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Situation = require('../../models/Situation');
 
-// '/api/situation/update' route
+// '/api_v2/situation/update' route
 router.patch('/:id', async (req, res) => {
     const situationData = req.body.situationData;
     const query = { _id: req.params.id }

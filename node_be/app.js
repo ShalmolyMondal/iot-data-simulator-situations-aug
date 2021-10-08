@@ -16,6 +16,18 @@ const HOST = '0.0.0.0';
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(cors({
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+}));
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', '*');
+//   if (req.method === 'OPTIONS') {
+//     res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+//     return res.status(200).json({});
+//   }
+// })
+
 // Connect to DB
 // 'mongodb://<db_user>:<password>@mongodb:27017/admin'
 mongoose.connect(

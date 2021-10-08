@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Situation = require('../../models/Situation');
 
-// '/api/situation/create' route
+// '/api_v2/situation/create' route
 router.post('/', async (req, res) => {
     const situation = new Situation(req.body.situationData);
     
