@@ -1,11 +1,9 @@
 import { observable, computed, action } from "mobx";
 import { fromPromise } from 'mobx-utils';
-import axios from "axios";
-import DeviceEntry from 'models/device/DeviceEntry';
 
-const api = axios.create({
-    baseURL: 'http://localhost:8080/api_v2/'
-})
+import DeviceEntry from 'models/device/DeviceEntry';
+import API from "../../api/axiosApiConfig";
+
 export default class SituationStore {
     appStore;
     @observable.ref items;
@@ -17,7 +15,7 @@ export default class SituationStore {
 
     getAll() {
         console.log('...loading situation');
-        api.get('/situation/all').then(res => {
+        API.get('/situation/all').then(res => {
             console.log('Situations loaded:') 
             console.log(res.data);
         })
