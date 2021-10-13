@@ -12,12 +12,14 @@ import CbtLayout from "../../shared/components/CbtLayout";
 export default class SituationManageScreen extends Component {
     constructor(props) {
         super(props);
+        this.props.store.view.openSituationManagePage();
     }
     render() {
         console.log(this.props.store)
         return (
             <CbtLayout
                 page={this.props.store.view.page}
+                situations={this.props.store.SituationManageStore.items}
                 {...this.props}
             />
         )

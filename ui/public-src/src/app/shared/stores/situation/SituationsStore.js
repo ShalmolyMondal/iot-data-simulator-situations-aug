@@ -15,16 +15,12 @@ export default class SituationStore {
 
     getAll() {
         console.log('...loading situation');
-        API.get('/situation/all').then(res => {
-            console.log('Situations loaded:') 
-            console.log(res.data);
-        })
-        // return this.appStore.transportLayer.get('/api_v2/situation/all')
-        //     .then(({ data = [] }) => {
-        //         console.log('devices loaded: ', data);
-        //         this.items = data.map((params) => {
-        //             return new DeviceEntry(params);
-        //         });
-        //     });
+        return API.get('/situation/all')
+            .then(({ data = [] }) => {
+                console.log('devices loaded: ', data);
+                this.items = data;
+            });
     }
+
+    
 }   

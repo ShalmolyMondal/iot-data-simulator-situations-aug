@@ -2,6 +2,7 @@ import { observable, computed, action } from "mobx";
 import { fromPromise } from "mobx-utils";
 import systemTypes from "models/system/types";
 import targetSystemFactory from "models/system/factory";
+import API from "../../api/axiosApiConfig";
 
 export default class SituationDetailStore {
     appStore;
@@ -100,11 +101,11 @@ export default class SituationDetailStore {
             });
     }
 
-    getById(systemId) {
-        return this.appStore.transportLayer
-            .get(`/api/systems/${systemId}`)
+    getById(Id) {
+        return API
+            .get(`/situation/get/${Id}`)
             .then(({ data }) => {
-                return targetSystemFactory(data);
+                this.items = data;
             });
     }
 }

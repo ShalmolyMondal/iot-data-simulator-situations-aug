@@ -33,6 +33,9 @@ const styles = theme => ({
   root: {
     display: 'flex',
   },
+  card: {
+    minWidth: 275
+  },
   gridroot: {
     flexGrow: 1,
   },
@@ -129,14 +132,16 @@ const styles = theme => ({
 class CbtLayout extends React.Component {
   constructor(props) {
     super(props);
-    console.log("11111111111111111", props)
+    console.log("111111111111", props);
   }
 
   state = {
     open: true,
     openModal: false,
     addEditSituationModalMode: "ADD_MODE",
-    selected: 0
+    selected: 0,
+    showDetail: false,
+    id: null
   };
 
   closeAddEditSituationModal = () => {
@@ -155,9 +160,24 @@ class CbtLayout extends React.Component {
     this.setState({ open: false });
   };
 
+  handleShowDetail = () => {
+    this.setState({ showDetail: true });
+  }
+
+
   render() {
-    const { classes } = this.props;
-   
+    const { classes, situations } = this.props;
+
+    console.log("-----------Situations-----------", situations);
+
+    const ShowDetail = (id) => (
+      <div>
+        Some Results
+      </div>
+    )
+
+
+
     return (
       <React.Fragment>
         <CssBaseline />
@@ -208,92 +228,96 @@ class CbtLayout extends React.Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            {this.props.page}
+            <Card className={classes.card}>
+              {this.props.page}
 
-            {/* {this.props.page} */}
-            {this.props.page == "add-situation" &&
-              <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-              >
-                <div className={classes.appBarSpacer} />
-                <div className={classes.appBarSpacer} />
-                <div className={classes.appBarSpacer} />
-                <div className={classes.noContentText}>No situation to display</div>
-                <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
-                  <AddIcon /> Add situaiton
-                </Button>
-              </Grid>
-            }
+              {/* {this.props.page} */}
+              {this.props.page == "add-situation" &&
+                <Grid
+                  container
+                  spacing={0}
+                  direction="column"
+                  alignItems="center"
+                  justify="center"
+                >
+                  <div className={classes.appBarSpacer} />
+                  <div className={classes.appBarSpacer} />
+                  <div className={classes.appBarSpacer} />
+                  <div className={classes.noContentText}>No situation to display</div>
+                  <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
+                    <AddIcon /> Add situaiton
+                  </Button>
+                </Grid>
+              }
 
-            {
-              this.props.page == "situations" &&
-              <Grid
-                container
-                spacing={16}
-                direction="row"
-                alignItems="center"
-                justify="flex-start"
-              >
-                {FAKE_DATA.situations && FAKE_DATA.situations.map((situations, id) => {
-                  return (
-                    <Grid item id={id}>
-                      <Card >
-                        <CardContent>
-                          <NotificationsIcon alignItems=""/>
-                          <Typography variant="h4" component="div">
-                            {situations.name}
-                          </Typography>
-                          <Typography variant="body2">
-                            {situations.active ? "Active" : "Inactive"}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  )
-                })}
+              {
+                this.props.page == "situations" &&
+                <Grid
+                  container
+                  spacing={16}
+                  direction="row"
+                  alignItems="center"
+                  justify="flex-start"
+                >
+                  {situations && situations.map((situation, id) => {
+                    return (
+                      <Grid item key={id}>
+                        <Card >
+                          <Button>
+                            <CardContent>
+                              <NotificationsIcon />
+                              <Typography variant="h4" component="div">
+                                {situation.situation_name}
+                              </Typography>
+                              <Typography variant="body2">
+                                {situation.situation_description}
+                              </Typography>
+                            </CardContent>
+                          </Button>
+                        </Card>
+                      </Grid>
+                    )
+                  })}
 
-              </Grid>
-            }
+                </Grid>
+              }
 
-            {
-              this.props.page == "manage-situation" &&
-              <Grid
-                container
-                spacing={16}
-                direction="row"
-                alignItems="center"
-                justify="flex-start"
-              >
-                {FAKE_DATA.situations && FAKE_DATA.situations.map((situations, id) => {
-                  return (
+              {
+                this.props.page == "manage-situation" &&
+                <Grid
+                  container
+                  spacing={16}
+                  direction="row"
+                  alignItems="center"
+                  justify="flex-start"
+                >
+                  {situations && situations.map((situation, id) => {
+                    return (
 
-                    <Grid item id={id}>
+                      <Grid item key={id}>
 
-                      <Card >
-                        <Button>
-                          <CardContent>
-                            <NotificationsIcon />
-                            <Typography variant="h4" component="div">
-                              {situations.name}
-                            </Typography>
-                            <Typography variant="body2">
-                              {situations.active ? "Active" : "Inactive"}
-                            </Typography>
-                          </CardContent>
-                        </Button>
-                      </Card>
+                        <Card >
+                          <Button>
+                            <CardContent>
+                              <NotificationsIcon />
+                              <Typography variant="h4" component="div">
+                                {situation.situation_name}
+                              </Typography>
+                              <Typography variant="body2">
+                                {situation.situation_description}
+                              </Typography>
+                            </CardContent>
+                          </Button>
+                        </Card>
 
-                    </Grid>
+                      </Grid>
 
-                  )
-                })}
+                    )
+                  })}
 
-              </Grid>
-            }
+                </Grid>
+              }
+            </Card>
           </main>
         </div>
         {

@@ -2,6 +2,8 @@ import { observable, computed, action } from "mobx";
 import { fromPromise } from "mobx-utils";
 import systemTypes from "models/system/types";
 import targetSystemFactory from "models/system/factory";
+import API from "../../api/axiosApiConfig";
+
 
 export default class SituationManageStore {
     appStore;
@@ -53,12 +55,10 @@ export default class SituationManageStore {
     }
 
     getAll() {
-        console.log("...loading situations systems");
-        return this.appStore.transportLayer
-            .get("/api/systems")
+        console.log('...loading manage-situation');
+        return API.get('/situation/all')
             .then(({ data = [] }) => {
-                console.log("target systems loaded: ", data);
-                this.items = data.map(targetSystemFactory);
+                this.items = data;
             });
     }
 
@@ -100,11 +100,11 @@ export default class SituationManageStore {
             });
     }
 
-    getById(systemId) {
-        return this.appStore.transportLayer
-            .get(`/api/systems/${systemId}`)
+    getById(Id) {
+        return API
+            .get(`/situation/get/${Id}`)
             .then(({ data }) => {
-                return targetSystemFactory(data);
+                this.items = data;
             });
     }
 }
