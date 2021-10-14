@@ -14,7 +14,7 @@ export default class SimulationRunScreen extends Component {
         super(props);
     }
     render() {
-        console.log(this.props.store)
+
         return (
             <CbtLayout
                 page={this.props.store.view.page}

@@ -16,6 +16,7 @@ export default class SituationScreen extends Component {
     constructor(props) {
         super(props);
         this.props.store.view.openSituationsPage();
+        console.log("props",props);
     }
     render() {
         const theme = createMuiTheme({

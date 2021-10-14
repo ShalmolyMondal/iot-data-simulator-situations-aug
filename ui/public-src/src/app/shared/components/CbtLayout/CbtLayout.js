@@ -33,6 +33,10 @@ const styles = theme => ({
   root: {
     display: 'flex',
   },
+  grid: {
+    flexGrow: 1,
+    padding: 20
+  },
   card: {
     minWidth: 275
   },
@@ -166,7 +170,7 @@ class CbtLayout extends React.Component {
 
 
   render() {
-    const { classes, situations } = this.props;
+    const { classes, situations, situation } = this.props;
 
     console.log("-----------Situations-----------", situations);
 
@@ -220,7 +224,7 @@ class CbtLayout extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <List>{mainListItems(this.props)}</List>
+            <List>{mainListItems(this.props, situations)}</List>
             <Divider />
 
             <List>{secondaryListItems(this.props)}</List>
@@ -317,6 +321,35 @@ class CbtLayout extends React.Component {
 
                 </Grid>
               }
+
+              {
+                this.props.page == "situation-detail" &&
+                <React.Fragment>
+                  {situation &&
+                    <div className={classes.grid}>
+                      <Grid
+                        container
+                        spacing={24}
+                      >
+                        <Grid item xs={10}>
+                          <Typography variant="title">{situation.situation_name}</Typography>
+                        </Grid>
+                        <Grid item xs={1}>
+                        <Button variant="contained" color="primary" >Edit</Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                        <Button variant="contained" color="secondary" >Delete</Button>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                          <Typography>{situation.situation_description}</Typography>
+                        </Grid>
+
+                      </Grid>
+                    </div>}
+                </React.Fragment>
+              }
+
             </Card>
           </main>
         </div>

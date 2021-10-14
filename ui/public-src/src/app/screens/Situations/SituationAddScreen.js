@@ -15,7 +15,7 @@ export default class SituationAddScreen extends Component {
     }
     
     render() {
-        console.log(this.props.store)
+
         return (
             <CbtLayout
                 page={this.props.store.view.page}

@@ -75,10 +75,10 @@ export default class ViewStore {
         this.appStore.situationAddStore.load();
     };
 
-    openSituationDetailPage = () => {
+    openSituationDetailPage = (id) => {
         this.page = "situation-detail";
         // this.currentTab = 6;
-        this.appStore.situationDetailStore.load();
+        this.appStore.situationsDetailScreenStore.load(id);
     };
 
     openSituationManagePage = () => {

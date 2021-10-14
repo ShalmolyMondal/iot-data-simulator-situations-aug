@@ -14,10 +14,12 @@ export default class SituationDetailScreen extends Component {
         super(props);
     }
     render() {
-        console.log(this.props.store)
+
         return (
             <CbtLayout
                 page={this.props.store.view.page}
+                situations={this.props.store.situationsStore.items}
+                situation={this.props.store.SituationDetailStore.items}
                 {...this.props}
             />
         )

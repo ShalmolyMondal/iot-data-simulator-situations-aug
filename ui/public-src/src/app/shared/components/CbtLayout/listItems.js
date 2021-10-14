@@ -14,8 +14,10 @@ import { FAKE_DATA } from '../../constants/fakeData';
 import ViewStore from '../../stores/ViewStore';
 // import FAKE_DATA from '../../constants/fakeData';
 
-export const mainListItems = (props) => {
-    console.log(FAKE_DATA.situations)
+export const mainListItems = (props,situations) => {
+  console.log("===mainListItems===",situations)
+
+
     return <div>
         <ListItem button onClick={()=> props.store.view.openSituationsPage()}>
             <ListItemIcon>
@@ -24,12 +26,12 @@ export const mainListItems = (props) => {
             <ListItemText primary="Dashboard" />
         </ListItem>
         {
-            FAKE_DATA.situations.map((situation, key) => {
-                return <ListItem button key={key}>
+            situations && situations.map((situation, key) => {
+                return <ListItem button key={key} onClick={()=> props.store.view.openSituationDetailPage(situation._id)}>
                     <ListItemIcon>
                         <AssignmentIcon />
                     </ListItemIcon>
-                    <ListItemText primary={situation.name} />
+                    <ListItemText primary={situation.situation_name} />
                 </ListItem>
             })
         }
