@@ -10,22 +10,21 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ClearIcon from '@material-ui/icons/Clear';
 import { mainListItems, secondaryListItems } from './listItems';
 import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituationModal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import { FAKE_DATA } from '../../constants/fakeData';
 
 const drawerWidth = 240;
 
@@ -141,6 +140,8 @@ class CbtLayout extends React.Component {
 
   state = {
     open: true,
+    dialogOpen: false,
+
     openModal: false,
     addEditSituationModalMode: "ADD_MODE",
     selected: 0,
@@ -166,6 +167,20 @@ class CbtLayout extends React.Component {
 
   handleShowDetail = () => {
     this.setState({ showDetail: true });
+  }
+
+  handleDialogOpen = () => {
+    this.setState({ dialogOpen: true });
+  };
+
+  handleDialogClose = () => {
+    this.setState({ dialogOpen: false });
+  };
+
+  handleDialogConfirm = (id) => {
+    this.props.store.view.deleteSituation(id);
+    this.setState({ dialogOpen: false });
+    this.props.store.view.openSituationsPage();
   }
 
 
@@ -335,10 +350,27 @@ class CbtLayout extends React.Component {
                           <Typography variant="title">{situation.situation_name}</Typography>
                         </Grid>
                         <Grid item xs={1}>
-                        <Button variant="contained" color="primary" >Edit</Button>
+                          <Button variant="contained" color="primary" onClick={() => this.openAddEditSituationModal()}>Edit</Button>
                         </Grid>
                         <Grid item xs={1}>
-                        <Button variant="contained" color="secondary" >Delete</Button>
+                          <Button variant="contained" color="secondary" onClick={()=>this.handleDialogOpen()}>Delete</Button>
+                          <Dialog
+                            open={this.state.dialogOpen}
+                            onClose={this.handleDialogClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
+                            
+                            <DialogActions>
+                              <Button onClick={this.handleDialogClose} color="primary">
+                                No
+                              </Button>
+                              <Button onClick={()=>this.handleDialogConfirm(situation._id)} color="primary" autoFocus>
+                                Yes
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                         </Grid>
 
                         <Grid item xs={12}>

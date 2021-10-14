@@ -4,7 +4,7 @@ export default class SituationsDetailScreenStore {
     consoleCollapsedSize = 78;
 
 
-    constructor(appStore) { 
+    constructor(appStore) {
         this.appStore = appStore;
         // this.consoleSize = this.consoleCollapsedSize;
     }
@@ -12,5 +12,9 @@ export default class SituationsDetailScreenStore {
     load(id) {
         this.appStore.situationsStore.getAll();
         this.appStore.SituationDetailStore.getById(id);
+    }
+
+    delete(id) {
+        this.appStore.SituationDetailStore.delete(id);
     }
 }

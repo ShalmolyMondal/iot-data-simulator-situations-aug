@@ -18,6 +18,7 @@ export default class SimulationRunScreen extends Component {
         return (
             <CbtLayout
                 page={this.props.store.view.page}
+                situations={this.props.store.situationsStore.items}
                 {...this.props}
             />
         )

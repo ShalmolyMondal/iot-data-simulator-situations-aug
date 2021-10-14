@@ -91,14 +91,12 @@ export default class SituationDetailStore {
         });
     }
 
-    delete(systemId) {
-        console.log("...deleting target system: ", systemId);
-        return this.appStore.transportLayer
-            .delete(`/api/systems/${systemId}`)
-            .then(({ data }) => {
-                console.log(`${systemId} successfully deleted`);
-                return targetSystemFactory(data);
-            });
+    delete(Id) {
+        return API
+        .delete(`/situation/delete/${Id}`)
+        .then(({ data }) => {
+            this.items = data;
+        });
     }
 
     getById(Id) {
