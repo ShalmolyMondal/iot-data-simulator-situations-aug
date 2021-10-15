@@ -10,28 +10,34 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ClearIcon from '@material-ui/icons/Clear';
 import { mainListItems, secondaryListItems } from './listItems';
 import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituationModal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-import { FAKE_DATA } from '../../constants/fakeData';
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
     display: 'flex',
+  },
+  grid: {
+    flexGrow: 1,
+    padding: 20
+  },
+  card: {
+    minWidth: 275
   },
   gridroot: {
     flexGrow: 1,
@@ -129,14 +135,18 @@ const styles = theme => ({
 class CbtLayout extends React.Component {
   constructor(props) {
     super(props);
-    console.log("11111111111111111", props)
+    console.log("111111111111", props);
   }
 
   state = {
     open: true,
+    dialogOpen: false,
+
     openModal: false,
     addEditSituationModalMode: "ADD_MODE",
-    selected: 0
+    selected: 0,
+    showDetail: false,
+    id: null
   };
 
   closeAddEditSituationModal = () => {
@@ -155,9 +165,38 @@ class CbtLayout extends React.Component {
     this.setState({ open: false });
   };
 
+  handleShowDetail = () => {
+    this.setState({ showDetail: true });
+  }
+
+  handleDialogOpen = () => {
+    this.setState({ dialogOpen: true });
+  };
+
+  handleDialogClose = () => {
+    this.setState({ dialogOpen: false });
+  };
+
+  handleDialogConfirm = (id) => {
+    this.props.store.view.deleteSituation(id);
+    this.setState({ dialogOpen: false });
+    this.props.store.view.openSituationsPage();
+  }
+
+
   render() {
-    const { classes } = this.props;
-   
+    const { classes, situations, situation } = this.props;
+
+    console.log("-----------Situations-----------", situations);
+
+    const ShowDetail = (id) => (
+      <div>
+        Some Results
+      </div>
+    )
+
+
+
     return (
       <React.Fragment>
         <CssBaseline />
@@ -200,7 +239,7 @@ class CbtLayout extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <List>{mainListItems(this.props)}</List>
+            <List>{mainListItems(this.props, situations)}</List>
             <Divider />
 
             <List>{secondaryListItems(this.props)}</List>
@@ -208,92 +247,142 @@ class CbtLayout extends React.Component {
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
-            {this.props.page}
+            <Card className={classes.card}>
+              {this.props.page}
 
-            {/* {this.props.page} */}
-            {this.props.page == "add-situation" &&
-              <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-              >
-                <div className={classes.appBarSpacer} />
-                <div className={classes.appBarSpacer} />
-                <div className={classes.appBarSpacer} />
-                <div className={classes.noContentText}>No situation to display</div>
-                <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
-                  <AddIcon /> Add situaiton
-                </Button>
-              </Grid>
-            }
+              {/* {this.props.page} */}
+              {this.props.page == "add-situation" &&
+                <Grid
+                  container
+                  spacing={0}
+                  direction="column"
+                  alignItems="center"
+                  justify="center"
+                >
+                  <div className={classes.appBarSpacer} />
+                  <div className={classes.appBarSpacer} />
+                  <div className={classes.appBarSpacer} />
+                  <div className={classes.noContentText}>No situation to display</div>
+                  <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
+                    <AddIcon /> Add situaiton
+                  </Button>
+                </Grid>
+              }
 
-            {
-              this.props.page == "situations" &&
-              <Grid
-                container
-                spacing={16}
-                direction="row"
-                alignItems="center"
-                justify="flex-start"
-              >
-                {FAKE_DATA.situations && FAKE_DATA.situations.map((situations, id) => {
-                  return (
-                    <Grid item id={id}>
-                      <Card >
-                        <CardContent>
-                          <NotificationsIcon alignItems=""/>
-                          <Typography variant="h4" component="div">
-                            {situations.name}
-                          </Typography>
-                          <Typography variant="body2">
-                            {situations.active ? "Active" : "Inactive"}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                  )
-                })}
+              {
+                this.props.page == "situations" &&
+                <Grid
+                  container
+                  spacing={16}
+                  direction="row"
+                  alignItems="center"
+                  justify="flex-start"
+                >
+                  {situations && situations.map((situation, id) => {
+                    return (
+                      <Grid item key={id}>
+                        <Card >
+                          <Button>
+                            <CardContent>
+                              <NotificationsIcon />
+                              <Typography variant="h4" component="div">
+                                {situation.situation_name}
+                              </Typography>
+                              <Typography variant="body2">
+                                {situation.situation_description}
+                              </Typography>
+                            </CardContent>
+                          </Button>
+                        </Card>
+                      </Grid>
+                    )
+                  })}
 
-              </Grid>
-            }
+                </Grid>
+              }
 
-            {
-              this.props.page == "manage-situation" &&
-              <Grid
-                container
-                spacing={16}
-                direction="row"
-                alignItems="center"
-                justify="flex-start"
-              >
-                {FAKE_DATA.situations && FAKE_DATA.situations.map((situations, id) => {
-                  return (
+              {
+                this.props.page == "manage-situation" &&
+                <Grid
+                  container
+                  spacing={16}
+                  direction="row"
+                  alignItems="center"
+                  justify="flex-start"
+                >
+                  {situations && situations.map((situation, id) => {
+                    return (
 
-                    <Grid item id={id}>
+                      <Grid item key={id}>
 
-                      <Card >
-                        <Button>
-                          <CardContent>
-                            <NotificationsIcon />
-                            <Typography variant="h4" component="div">
-                              {situations.name}
-                            </Typography>
-                            <Typography variant="body2">
-                              {situations.active ? "Active" : "Inactive"}
-                            </Typography>
-                          </CardContent>
-                        </Button>
-                      </Card>
+                        <Card >
+                          <Button>
+                            <CardContent>
+                              <NotificationsIcon />
+                              <Typography variant="h4" component="div">
+                                {situation.situation_name}
+                              </Typography>
+                              <Typography variant="body2">
+                                {situation.situation_description}
+                              </Typography>
+                            </CardContent>
+                          </Button>
+                        </Card>
 
-                    </Grid>
+                      </Grid>
 
-                  )
-                })}
+                    )
+                  })}
 
-              </Grid>
-            }
+                </Grid>
+              }
+
+              {
+                this.props.page == "situation-detail" &&
+                <React.Fragment>
+                  {situation &&
+                    <div className={classes.grid}>
+                      <Grid
+                        container
+                        spacing={24}
+                      >
+                        <Grid item xs={10}>
+                          <Typography variant="title">{situation.situation_name}</Typography>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button variant="contained" color="primary" onClick={() => this.openAddEditSituationModal()}>Edit</Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button variant="contained" color="secondary" onClick={()=>this.handleDialogOpen()}>Delete</Button>
+                          <Dialog
+                            open={this.state.dialogOpen}
+                            onClose={this.handleDialogClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
+                            
+                            <DialogActions>
+                              <Button onClick={this.handleDialogClose} color="primary">
+                                No
+                              </Button>
+                              <Button onClick={()=>this.handleDialogConfirm(situation._id)} color="primary" autoFocus>
+                                Yes
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                          <Typography>{situation.situation_description}</Typography>
+                        </Grid>
+
+                      </Grid>
+                    </div>}
+                </React.Fragment>
+              }
+
+            </Card>
           </main>
         </div>
         {

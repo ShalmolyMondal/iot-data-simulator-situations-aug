@@ -72,26 +72,34 @@ export default class ViewStore {
     openSituationAddPage = () => {
         this.page = "add-situation";
         // this.currentTab = 5;
-        // this.appStore.situationAddStore.load();
+        this.appStore.situationAddStore.load();
     };
 
-    openSituationDetailPage = () => {
+    openSituationDetailPage = (id) => {
         this.page = "situation-detail";
         // this.currentTab = 6;
-        // this.appStore.situationDetailStore.load();
+        this.appStore.situationsDetailScreenStore.load(id);
+    };
+
+    deleteSituation = (id) => {
+        // this.page = "situation-detail";
+        // this.currentTab = 6;
+        this.appStore.situationsDetailScreenStore.delete(id);
     };
 
     openSituationManagePage = () => {
         this.page = "manage-situation";
         // this.currentTab = 7;
-        // this.appStore.situationManageStore.load();
+        this.appStore.situationsManageScreenStore.load();
     };
 
     openSimulationRunPage = () => {
         this.page = "run-simulation";
         // this.currentTab = 7;
-        // this.appStore.situationManageStore.load();
+        this.appStore.situationManageStore.load();
     };
+
+
 
     // Modals
     openCreateDefinition = () => {

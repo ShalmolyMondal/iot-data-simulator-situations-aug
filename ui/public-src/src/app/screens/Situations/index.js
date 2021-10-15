@@ -15,6 +15,8 @@ import green from '@material-ui/core/colors/green';
 export default class SituationScreen extends Component {
     constructor(props) {
         super(props);
+        this.props.store.view.openSituationsPage();
+        console.log("props",props);
     }
     render() {
         const theme = createMuiTheme({
@@ -32,6 +34,7 @@ export default class SituationScreen extends Component {
             <MuiThemeProvider theme={theme}>
                 <CbtLayout
                     page={this.props.store.view.page}
+                    situations={this.props.store.situationsStore.items}
                     {...this.props}
                 />
             </MuiThemeProvider>
