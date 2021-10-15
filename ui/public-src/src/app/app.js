@@ -7,8 +7,8 @@ import { reaction, whyRun } from "mobx";
 // Polyfills
 import es6Promise from "es6-promise";
 es6Promise.polyfill();
-import injectTapEventPlugin from "react-tap-event-plugin";
-injectTapEventPlugin();
+// import injectTapEventPlugin from "react-tap-event-plugin";
+// injectTapEventPlugin();
 
 import StompConnectionProvider from 'api/stomp/stompConnectionProvider';
 import AppStore from "./shared/stores/AppStore.js";
@@ -41,15 +41,16 @@ reaction(
 );
 
 class App extends Component {
+    
     render() {
         return (
-            <MuiThemeProvider theme={styles.theme}>
+            
                 <ThemeProvider theme={styles.theme}>
                     <Provider store={appStore}>
                         <MainScreen />
                     </Provider>
                 </ThemeProvider>
-            </MuiThemeProvider>
+            
         );
     }
 }

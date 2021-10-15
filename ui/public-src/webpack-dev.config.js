@@ -15,6 +15,9 @@ module.exports = {
         contentBase: __dirname + '/../public',
         port: 9100,
         proxy: {
+            "/api_v2/**": {
+                target: 'http://0.0.0.0:8080'
+            },
             "/ws/*": {
                 target: 'http://127.0.0.1:8090',
                 ws: true
@@ -24,7 +27,7 @@ module.exports = {
             },
             "/api/**": {
                 target: 'http://127.0.0.1:8090'
-            },
+            }
         }
     }
 };
