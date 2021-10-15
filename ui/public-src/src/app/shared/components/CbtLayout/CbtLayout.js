@@ -25,19 +25,18 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
-
 const drawerWidth = 240;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: 'flex',
   },
   grid: {
     flexGrow: 1,
-    padding: 20
+    padding: 20,
   },
   card: {
-    minWidth: 275
+    minWidth: 275,
   },
   gridroot: {
     flexGrow: 1,
@@ -46,7 +45,7 @@ const styles = theme => ({
     paddingRight: 24, // keep right padding when drawer closed
   },
   sidebarHeader: {
-    marginLeft: '20px'
+    marginLeft: '20px',
   },
   toolbarIcon: {
     display: 'flex',
@@ -107,7 +106,7 @@ const styles = theme => ({
     height: '100vh',
     overflow: 'auto',
     background: '#FBFCFD',
-    width: 'calc(100vw - 240px)'
+    width: 'calc(100vw - 240px)',
   },
   chartContainer: {
     marginLeft: -22,
@@ -124,38 +123,43 @@ const styles = theme => ({
   },
   noContentText: {
     fontSize: '24px',
-    color: '#757575'
+    color: '#757575',
   },
   card: {
     minWidth: 275,
-    minHeight: 'calc(100vh - 120px)'
+    minHeight: 'calc(100vh - 120px)',
   },
 });
 
 class CbtLayout extends React.Component {
   constructor(props) {
     super(props);
-    console.log("111111111111", props);
+    console.log('111111111111', props);
   }
 
   state = {
     open: true,
     dialogOpen: false,
-
+    situationId: null,
     openModal: false,
-    addEditSituationModalMode: "ADD_MODE",
+    addEditSituationModalMode: 'ADD_MODE',
     selected: 0,
     showDetail: false,
-    id: null
+    id: null,
   };
 
   closeAddEditSituationModal = () => {
     this.setState({ openModal: false });
-  }
+  };
 
-  openAddEditSituationModal = () => {
-    this.setState({ openModal: true });
-  }
+  openAddEditSituationModal = (action, situationId) => {
+    console.log(situationId);
+    this.setState({
+      openModal: true,
+      addEditSituationModalMode: action == 'edit' ? 'EDIT_MODE' : 'ADD_MODE',
+      situationId: situationId,
+    });
+  };
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -167,7 +171,7 @@ class CbtLayout extends React.Component {
 
   handleShowDetail = () => {
     this.setState({ showDetail: true });
-  }
+  };
 
   handleDialogOpen = () => {
     this.setState({ dialogOpen: true });
@@ -181,21 +185,15 @@ class CbtLayout extends React.Component {
     this.props.store.view.deleteSituation(id);
     this.setState({ dialogOpen: false });
     this.props.store.view.openSituationsPage();
-  }
-
+  };
 
   render() {
     const { classes, situations, situation } = this.props;
 
-    console.log("-----------Situations-----------", situations);
+    console.log('-----------Situations-----------', situations);
+    console.log('-----------single-----------', situation);
 
-    const ShowDetail = (id) => (
-      <div>
-        Some Results
-      </div>
-    )
-
-
+    const ShowDetail = (id) => <div>Some Results</div>;
 
     return (
       <React.Fragment>
@@ -203,37 +201,51 @@ class CbtLayout extends React.Component {
         <div className={classes.root}>
           <AppBar
             position="absolute"
-            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+            className={classNames(
+              classes.appBar,
+              this.state.open && classes.appBarShift
+            )}
           >
-            <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+            <Toolbar
+              disableGutters={!this.state.open}
+              className={classes.toolbar}
+            >
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
                 onClick={this.handleDrawerOpen}
                 className={classNames(
                   classes.menuButton,
-                  this.state.open && classes.menuButtonHidden,
+                  this.state.open && classes.menuButtonHidden
                 )}
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit" noWrap className={classes.title}>
+              <Typography
+                variant="title"
+                color="inherit"
+                noWrap
+                className={classes.title}
+              >
                 IOT PROJECT
               </Typography>
-              <IconButton color="inherit">
-
-              </IconButton>
+              <IconButton color="inherit"></IconButton>
             </Toolbar>
           </AppBar>
           <Drawer
             variant="permanent"
             classes={{
-              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+              paper: classNames(
+                classes.drawerPaper,
+                !this.state.open && classes.drawerPaperClose
+              ),
             }}
             open={this.state.open}
           >
             <div className={classes.toolbarIcon}>
-              <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
+              <strong className={classes.sidebarHeader}>
+                IoT Benchmark Tool
+              </strong>
               <IconButton onClick={this.handleDrawerClose}>
                 <ChevronLeftIcon />
               </IconButton>
@@ -243,15 +255,14 @@ class CbtLayout extends React.Component {
             <Divider />
 
             <List>{secondaryListItems(this.props)}</List>
-
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Card className={classes.card}>
-              {this.props.page}
+              {/* {this.props.page} */}
 
               {/* {this.props.page} */}
-              {this.props.page == "add-situation" &&
+              {this.props.page == 'add-situation' && (
                 <Grid
                   container
                   spacing={0}
@@ -262,15 +273,21 @@ class CbtLayout extends React.Component {
                   <div className={classes.appBarSpacer} />
                   <div className={classes.appBarSpacer} />
                   <div className={classes.appBarSpacer} />
-                  <div className={classes.noContentText}>No situation to display</div>
-                  <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
+                  <div className={classes.noContentText}>
+                    No situation to display
+                  </div>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.button}
+                    onClick={() => this.openAddEditSituationModal('add', null)}
+                  >
                     <AddIcon /> Add situaiton
                   </Button>
                 </Grid>
-              }
+              )}
 
-              {
-                this.props.page == "situations" &&
+              {this.props.page == 'situations' && (
                 <Grid
                   container
                   spacing={16}
@@ -278,31 +295,30 @@ class CbtLayout extends React.Component {
                   alignItems="center"
                   justify="flex-start"
                 >
-                  {situations && situations.map((situation, id) => {
-                    return (
-                      <Grid item key={id}>
-                        <Card >
-                          <Button>
-                            <CardContent>
-                              <NotificationsIcon />
-                              <Typography variant="h4" component="div">
-                                {situation.situation_name}
-                              </Typography>
-                              <Typography variant="body2">
-                                {situation.situation_description}
-                              </Typography>
-                            </CardContent>
-                          </Button>
-                        </Card>
-                      </Grid>
-                    )
-                  })}
-
+                  {situations &&
+                    situations.map((situation, id) => {
+                      return (
+                        <Grid item key={id}>
+                          <Card>
+                            <Button>
+                              <CardContent>
+                                <NotificationsIcon />
+                                <Typography variant="h4" component="div">
+                                  {situation.situation_name}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {situation.situation_description}
+                                </Typography>
+                              </CardContent>
+                            </Button>
+                          </Card>
+                        </Grid>
+                      );
+                    })}
                 </Grid>
-              }
+              )}
 
-              {
-                this.props.page == "manage-situation" &&
+              {this.props.page == 'manage-situation' && (
                 <Grid
                   container
                   spacing={16}
@@ -310,63 +326,85 @@ class CbtLayout extends React.Component {
                   alignItems="center"
                   justify="flex-start"
                 >
-                  {situations && situations.map((situation, id) => {
-                    return (
-
-                      <Grid item key={id}>
-
-                        <Card >
-                          <Button>
-                            <CardContent>
-                              <NotificationsIcon />
-                              <Typography variant="h4" component="div">
-                                {situation.situation_name}
-                              </Typography>
-                              <Typography variant="body2">
-                                {situation.situation_description}
-                              </Typography>
-                            </CardContent>
-                          </Button>
-                        </Card>
-
-                      </Grid>
-
-                    )
-                  })}
-
+                  {situations &&
+                    situations.map((situation, id) => {
+                      return (
+                        <Grid item key={id}>
+                          <Card>
+                            <Button>
+                              <CardContent>
+                                <NotificationsIcon />
+                                <Typography variant="h4" component="div">
+                                  {situation.situation_name}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {situation.situation_description}
+                                </Typography>
+                              </CardContent>
+                            </Button>
+                          </Card>
+                        </Grid>
+                      );
+                    })}
                 </Grid>
-              }
+              )}
 
-              {
-                this.props.page == "situation-detail" &&
+              {this.props.page == 'situation-detail' && (
                 <React.Fragment>
-                  {situation &&
+                  {situation && (
                     <div className={classes.grid}>
-                      <Grid
-                        container
-                        spacing={24}
-                      >
+                      <Grid container spacing={24}>
                         <Grid item xs={10}>
-                          <Typography variant="title">{situation.situation_name}</Typography>
+                          <Typography variant="title">
+                            {situation.situation_name}
+                          </Typography>
                         </Grid>
                         <Grid item xs={1}>
-                          <Button variant="contained" color="primary" onClick={() => this.openAddEditSituationModal()}>Edit</Button>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                              this.openAddEditSituationModal(
+                                'edit',
+                                situation._id
+                              )
+                            }
+                          >
+                            Edit
+                          </Button>
                         </Grid>
                         <Grid item xs={1}>
-                          <Button variant="contained" color="secondary" onClick={()=>this.handleDialogOpen()}>Delete</Button>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => this.handleDialogOpen()}
+                          >
+                            Delete
+                          </Button>
                           <Dialog
                             open={this.state.dialogOpen}
                             onClose={this.handleDialogClose}
                             aria-labelledby="alert-dialog-title"
                             aria-describedby="alert-dialog-description"
                           >
-                            <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
-                            
+                            <DialogTitle id="alert-dialog-title">
+                              {'Are you sure want to delete?'}
+                            </DialogTitle>
+
                             <DialogActions>
-                              <Button onClick={this.handleDialogClose} color="primary">
+                              <Button
+                                onClick={this.handleDialogClose}
+                                color="primary"
+                              >
                                 No
                               </Button>
-                              <Button onClick={()=>this.handleDialogConfirm(situation._id)} color="primary" autoFocus>
+                              <Button
+                                onClick={() =>
+                                  this.handleDialogConfirm(situation._id)
+                                }
+                                color="primary"
+                                autoFocus
+                              >
                                 Yes
                               </Button>
                             </DialogActions>
@@ -374,24 +412,30 @@ class CbtLayout extends React.Component {
                         </Grid>
 
                         <Grid item xs={12}>
-                          <Typography>{situation.situation_description}</Typography>
+                          <Typography>
+                            {situation.situation_description}
+                          </Typography>
                         </Grid>
-
                       </Grid>
-                    </div>}
+                    </div>
+                  )}
                 </React.Fragment>
-              }
-
+              )}
             </Card>
           </main>
         </div>
         {
           <AddEditSituationModalWrapped
-            modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
+            modalTitle={
+              this.state.addEditSituationModalMode == 'ADD_MODE'
+                ? 'Add Situation'
+                : 'Edit Situation'
+            }
+            mode={this.state.addEditSituationModalMode}
+            situationId={this.state.situationId}
             open={this.state.openModal}
             closeModal={this.closeAddEditSituationModal}
-          >
-          </AddEditSituationModalWrapped>
+          ></AddEditSituationModalWrapped>
         }
       </React.Fragment>
     );

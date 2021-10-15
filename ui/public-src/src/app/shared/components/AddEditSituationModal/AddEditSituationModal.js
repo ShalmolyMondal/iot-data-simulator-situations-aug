@@ -234,6 +234,10 @@ const DialogTitle = withStyles((theme) => ({
 });
 
 class AddEditSituationModal extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   handleClose = () => {
     this.setState({
       values: false,
@@ -377,8 +381,29 @@ class AddEditSituationModal extends React.Component {
     }).then((res) => {
       console.log(res);
       console.log(Success);
+      this.handleClose();
     });
   };
+
+  populateFormData(situationId) {
+    console.log({ situationId });
+    API.get('/situation/get/' + situationId).then((res) => {
+      const situationData = res.data;
+      this.setState({
+        situation_name: situationData.situation_name,
+        situation_description: situationData.situation_description,
+        context_attributes: situationData.context_attributes,
+      });
+      console.log(Success);
+    });
+  }
+
+  // {
+  //   console.log('@@%@@^', this.props.mode);
+  //   this.props.mode == 'EDIT_MODE' &&
+  //     this.props.situationId &&
+  //     this.populateFormData(this.props.situationId);
+  // }
 
   render() {
     const { classes } = this.props;
