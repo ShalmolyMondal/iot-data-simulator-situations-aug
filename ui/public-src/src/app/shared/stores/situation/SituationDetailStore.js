@@ -54,12 +54,11 @@ export default class SituationDetailStore {
     }
 
     getAll() {
-        console.log("...loading situations systems");
-        return this.appStore.transportLayer
-            .get("/api/systems")
+        console.log('...loading situation');
+        return API.get('/situation/all')
             .then(({ data = [] }) => {
-                console.log("target systems loaded: ", data);
-                this.items = data.map(targetSystemFactory);
+                console.log('devices loaded: ', data);
+                this.items = data;
             });
     }
 

@@ -72,7 +72,7 @@ export default class ViewStore {
     openSituationAddPage = () => {
         this.page = "add-situation";
         // this.currentTab = 5;
-        this.appStore.situationAddStore.load();
+        this.appStore.situationsAddScreenStore.load();
     };
 
     openSituationDetailPage = (id) => {
@@ -96,7 +96,7 @@ export default class ViewStore {
     openSimulationRunPage = () => {
         this.page = "run-simulation";
         // this.currentTab = 7;
-        this.appStore.situationManageStore.load();
+        this.appStore.simulationRunScreenStore.load();
     };
 
 

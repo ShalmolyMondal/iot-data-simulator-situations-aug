@@ -189,12 +189,6 @@ class CbtLayout extends React.Component {
 
     console.log("-----------Situations-----------", situations);
 
-    const ShowDetail = (id) => (
-      <div>
-        Some Results
-      </div>
-    )
-
 
 
     return (
@@ -273,14 +267,12 @@ class CbtLayout extends React.Component {
                 this.props.page == "situations" &&
                 <Grid
                   container
-                  spacing={16}
-                  direction="row"
+                  spacing={24}
                   alignItems="center"
-                  justify="flex-start"
                 >
                   {situations && situations.map((situation, id) => {
                     return (
-                      <Grid item key={id}>
+                      <Grid item xs={4} key={id}>
                         <Card >
                           <Button>
                             <CardContent>
@@ -305,18 +297,16 @@ class CbtLayout extends React.Component {
                 this.props.page == "manage-situation" &&
                 <Grid
                   container
-                  spacing={16}
-                  direction="row"
+                  spacing={24}
                   alignItems="center"
-                  justify="flex-start"
                 >
                   {situations && situations.map((situation, id) => {
                     return (
 
-                      <Grid item key={id}>
+                      <Grid item xs={4} key={id}>
 
                         <Card >
-                          <Button>
+                          <Button onClick={()=>this.props.store.view.openSituationDetailPage(situation._id)}>
                             <CardContent>
                               <NotificationsIcon />
                               <Typography variant="h4" component="div">

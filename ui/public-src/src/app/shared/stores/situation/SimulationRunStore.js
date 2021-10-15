@@ -2,6 +2,7 @@ import { observable, computed, action } from "mobx";
 import { fromPromise } from "mobx-utils";
 import systemTypes from "models/system/types";
 import targetSystemFactory from "models/system/factory";
+import API from "../../api/axiosApiConfig"
 
 export default class SimulationRunStore {
     appStore;
@@ -53,12 +54,11 @@ export default class SimulationRunStore {
     }
 
     getAll() {
-        console.log("...loading situations systems");
-        return this.appStore.transportLayer
-            .get("/api/systems")
+        console.log('...loading situation');
+        return API.get('/situation/all')
             .then(({ data = [] }) => {
-                console.log("target systems loaded: ", data);
-                this.items = data.map(targetSystemFactory);
+                console.log('devices loaded: ', data);
+                this.items = data;
             });
     }
 

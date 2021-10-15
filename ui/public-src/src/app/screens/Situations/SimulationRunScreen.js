@@ -12,13 +12,14 @@ import CbtLayout from "../../shared/components/CbtLayout";
 export default class SimulationRunScreen extends Component {
     constructor(props) {
         super(props);
+        this.props.store.view.openSimulationRunPage();
     }
     render() {
 
         return (
             <CbtLayout
                 page={this.props.store.view.page}
-                situations={this.props.store.situationsStore.items}
+                situations={this.props.store.SimulationRunStore.items}
                 {...this.props}
             />
         )
