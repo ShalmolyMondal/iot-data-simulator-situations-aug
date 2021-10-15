@@ -238,7 +238,7 @@ class AddEditSituationModal extends React.Component {
     super(props);
   }
 
-  handleClose = () => {
+  handleClose = (message = '') => {
     this.setState({
       values: false,
       expanded: 1,
@@ -246,7 +246,7 @@ class AddEditSituationModal extends React.Component {
       situation_description: '',
       context_attributes: [{ ...DEFAULT_VALUES.CONTEXT_ATTRIBUTE }],
     });
-    this.props.closeModal();
+    this.props.closeModal(message);
   };
 
   state = {
@@ -380,7 +380,6 @@ class AddEditSituationModal extends React.Component {
       situationData: situationPayload,
     }).then((res) => {
       console.log(res);
-      console.log(Success);
       this.handleClose();
     });
   };
@@ -394,7 +393,6 @@ class AddEditSituationModal extends React.Component {
         situation_description: situationData.situation_description,
         context_attributes: situationData.context_attributes,
       });
-      console.log(Success);
     });
   }
 

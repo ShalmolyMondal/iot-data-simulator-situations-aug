@@ -21,10 +21,20 @@ import Card from '@material-ui/core/Card';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -129,6 +139,33 @@ const styles = (theme) => ({
     minWidth: 275,
     minHeight: 'calc(100vh - 120px)',
   },
+  simulationCard: {
+    maxWidth: 400,
+  },
+  flexthis: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  actions: {
+    display: 'flex',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: '#f1f1f1',
+  },
 });
 
 class CbtLayout extends React.Component {
@@ -146,14 +183,23 @@ class CbtLayout extends React.Component {
     selected: 0,
     showDetail: false,
     id: null,
+    message: '',
+    openSnackbar: false,
+    expanded: false,
   };
 
-  closeAddEditSituationModal = () => {
-    this.setState({ openModal: false });
+  handleExpandClick = () => {
+    this.setState((state) => ({ expanded: !state.expanded }));
+  };
+  closeAddEditSituationModal = (message) => {
+    this.setState({
+      openModal: false,
+      message: message,
+      openSnackbar: message ? true : false,
+    });
   };
 
   openAddEditSituationModal = (action, situationId) => {
-    console.log(situationId);
     this.setState({
       openModal: true,
       addEditSituationModalMode: action == 'edit' ? 'EDIT_MODE' : 'ADD_MODE',
@@ -421,6 +467,201 @@ class CbtLayout extends React.Component {
                   )}
                 </React.Fragment>
               )}
+              {this.props.page == 'run-simulation' && (
+                <React.Fragment>
+                  <div className="">
+                    <h1>Run Simulation</h1>
+                    <div className={classes.flexthis}>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                    </div>
+                  </div>
+                </React.Fragment>
+              )}
             </Card>
           </main>
         </div>
@@ -436,6 +677,19 @@ class CbtLayout extends React.Component {
             open={this.state.openModal}
             closeModal={this.closeAddEditSituationModal}
           ></AddEditSituationModalWrapped>
+        }
+        {
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            open={this.state.openSnackbar}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.message}</span>}
+          />
         }
       </React.Fragment>
     );
