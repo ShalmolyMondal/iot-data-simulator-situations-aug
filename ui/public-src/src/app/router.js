@@ -9,7 +9,7 @@ export function createRouter(store) {
         "/devices": view.openDevicesPage,
         "/systems": view.openSystemsPage,
         "/add-situation": view.openSituationAddPage,
-        "/situation-detail": view.openSituationDetailPage,
+        "/situation-detail/:id": view.openSituationDetailPage,
         "/manage-situation": view.openSituationManagePage,
         "/run-simulation": view.openSimulationRunPage,
         "/situations": view.openSituationsPage

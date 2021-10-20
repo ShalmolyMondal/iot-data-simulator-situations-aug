@@ -12,6 +12,7 @@ export default class SituationDetailStore {
     };
 
     @observable.ref items;
+    @observable item;
     @observable nameFilter = "";
     @observable typeFilter = this.filterTypes.all;
 
@@ -75,18 +76,26 @@ export default class SituationDetailStore {
         return result;
     }
 
-    create(params) {
-        return this.appStore.transportLayer.post("/api/systems", {
+    create(params, callback) {
+        return API.post("/situation/create", {
             ...params
+        })
+        .then((res) => {
+            this.appStore.situationsManageScreenStore.load();
+            callback("Situation created successfully");
         });
     }
 
-    update(systemId, params) {
-        if (!systemId) {
+    update(situationId, params, callback) {
+        if (!situationId) {
             return this.create(params);
         }
-        return this.appStore.transportLayer.put(`/api/systems/${systemId}`, {
+        return API.patch(`/situation/update/${situationId}`, {
             ...params
+        })
+        .then((res) => {
+            this.appStore.situationsManageScreenStore.load();
+            callback("Situation updated successfully");
         });
     }
 
@@ -94,7 +103,7 @@ export default class SituationDetailStore {
         return API
         .delete(`/situation/delete/${Id}`)
         .then(({ data }) => {
-            this.items = data;
+            this.appStore.situationsManageScreenStore.load();
         });
     }
 
@@ -102,7 +111,7 @@ export default class SituationDetailStore {
         return API
             .get(`/situation/get/${Id}`)
             .then(({ data }) => {
-                this.items = data;
+                this.item = data;
             });
     }
 }

@@ -21,6 +21,7 @@ import Card from '@material-ui/core/Card';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Snackbar, { SnackbarContent } from "material-ui/Snackbar";
 
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -32,18 +33,28 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActions from '@material-ui/core/CardActions';
+import Collapse from '@material-ui/core/Collapse';
+import Avatar from '@material-ui/core/Avatar';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 const drawerWidth = 240;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: 'flex',
   },
   grid: {
     flexGrow: 1,
-    padding: 20
+    padding: 20,
   },
   card: {
-    minWidth: 275
+    minWidth: 275,
   },
   gridroot: {
     flexGrow: 1,
@@ -52,7 +63,7 @@ const styles = theme => ({
     paddingRight: 24, // keep right padding when drawer closed
   },
   sidebarHeader: {
-    marginLeft: '20px'
+    marginLeft: '20px',
   },
   toolbarIcon: {
     display: 'flex',
@@ -113,7 +124,7 @@ const styles = theme => ({
     height: '100vh',
     overflow: 'auto',
     background: '#FBFCFD',
-    width: 'calc(100vw - 240px)'
+    width: 'calc(100vw - 240px)',
   },
   chartContainer: {
     marginLeft: -22,
@@ -134,12 +145,39 @@ const styles = theme => ({
   },
   noContentText: {
     fontSize: '24px',
-    color: '#757575'
+    color: '#757575',
   },
   card: {
     minWidth: 275,
     minHeight: 'calc(100vh - 120px)',
     padding: "inherit"
+  },
+  simulationCard: {
+    maxWidth: 400,
+  },
+  flexthis: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  actions: {
+    display: 'flex',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  avatar: {
+    backgroundColor: '#f1f1f1',
   },
 
 });
@@ -152,21 +190,36 @@ class CbtLayout extends React.Component {
   state = {
     open: true,
     dialogOpen: false,
-
+    selectedSituationId: null,
     openModal: false,
-    addEditSituationModalMode: "ADD_MODE",
+    addEditSituationModalMode: 'ADD_MODE',
     selected: 0,
     showDetail: false,
-    id: null
+    id: null,
+    message: '',
+    openSnackbar: false,
+    expanded: false,
   };
 
-  closeAddEditSituationModal = () => {
-    this.setState({ openModal: false });
-  }
+  handleExpandClick = () => {
+    this.setState((state) => ({ expanded: !state.expanded }));
+  };
+  closeAddEditSituationModal = (message) => {
+    this.setState({
+      openModal: false,
+      message: message,
+      openSnackbar: message ? true : false,
+      selectedSituationId: null,
+    });
+  };
 
-  openAddEditSituationModal = () => {
-    this.setState({ openModal: true });
-  }
+  openAddEditSituationModal = (action, situationId) => {
+    this.setState({
+      openModal: true,
+      addEditSituationModalMode: action == 'edit' ? 'EDIT_MODE' : 'ADD_MODE',
+      selectedSituationId: situationId,
+    });
+  };
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -178,35 +231,42 @@ class CbtLayout extends React.Component {
 
   handleShowDetail = () => {
     this.setState({ showDetail: true });
-  }
+  };
 
-  handleDialogOpen = () => {
-    this.setState({ dialogOpen: true });
+  handleDeleteDialogOpen = (situationId) => {
+    this.setState({ 
+      dialogOpen: true,
+      selectedSituationId: situationId,
+    });
   };
 
   handleDialogClose = () => {
-    this.setState({ dialogOpen: false });
+    this.setState({ dialogOpen: false, selectedSituationId: null });
   };
 
-  handleDialogConfirm = (id) => {
+  handleConfirmDeleteSituation = (id) => {
     this.props.store.view.deleteSituation(id);
-    this.setState({ dialogOpen: false });
-    this.props.store.view.openSituationsPage();
-  }
-
-  handleDialogConfirmManageSituations = (id) => {
-    this.props.store.view.deleteSituation(id);
-    this.setState({ dialogOpen: false });
+    this.setState({ 
+      dialogOpen: false,
+      selectedSituationId: null,
+      message: "Deleted situation successfully",
+      openSnackbar: true
+    });
     this.props.store.view.openSituationManagePage();
   }
 
-
+  closeSnackBar = () => {
+    this.setState({ 
+      message: null,
+      openSnackbar: false });
+  } 
   render() {
     const { classes, situations, situation } = this.props;
 
     console.log("-----------Situations-----------", situations);
 
 
+    const ShowDetail = (id) => <div>Some Results</div>;
 
     return (
       <React.Fragment>
@@ -214,37 +274,51 @@ class CbtLayout extends React.Component {
         <div className={classes.root}>
           <AppBar
             position="absolute"
-            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+            className={classNames(
+              classes.appBar,
+              this.state.open && classes.appBarShift
+            )}
           >
-            <Toolbar disableGutters={!this.state.open} className={classes.toolbar}>
+            <Toolbar
+              disableGutters={!this.state.open}
+              className={classes.toolbar}
+            >
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
                 onClick={this.handleDrawerOpen}
                 className={classNames(
                   classes.menuButton,
-                  this.state.open && classes.menuButtonHidden,
+                  this.state.open && classes.menuButtonHidden
                 )}
               >
                 <MenuIcon />
               </IconButton>
-              <Typography variant="title" color="inherit" noWrap className={classes.title}>
+              <Typography
+                variant="title"
+                color="inherit"
+                noWrap
+                className={classes.title}
+              >
                 IOT PROJECT
               </Typography>
-              <IconButton color="inherit">
-
-              </IconButton>
+              <IconButton color="inherit"></IconButton>
             </Toolbar>
           </AppBar>
           <Drawer
             variant="permanent"
             classes={{
-              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+              paper: classNames(
+                classes.drawerPaper,
+                !this.state.open && classes.drawerPaperClose
+              ),
             }}
             open={this.state.open}
           >
             <div className={classes.toolbarIcon}>
-              <strong className={classes.sidebarHeader}>IoT Benchmark Tool</strong>
+              <strong className={classes.sidebarHeader}>
+                IoT Benchmark Tool
+              </strong>
               <IconButton onClick={this.handleDrawerClose}>
                 <ChevronLeftIcon />
               </IconButton>
@@ -254,14 +328,13 @@ class CbtLayout extends React.Component {
             <Divider />
 
             <List>{secondaryListItems(this.props)}</List>
-
           </Drawer>
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Card className={classes.card}>
 
               {/* {this.props.page} */}
-              {this.props.page == "add-situation" &&
+              {this.props.page == 'add-situation' && (
                 <Grid
                   container
                   spacing={0}
@@ -272,15 +345,21 @@ class CbtLayout extends React.Component {
                   <div className={classes.appBarSpacer} />
                   <div className={classes.appBarSpacer} />
                   <div className={classes.appBarSpacer} />
-                  <div className={classes.noContentText}>No situation to display</div>
-                  <Button color="primary" variant="contained" className={classes.button} onClick={this.openAddEditSituationModal}>
+                  <div className={classes.noContentText}>
+                    No situation to display
+                  </div>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.button}
+                    onClick={() => this.openAddEditSituationModal('add', null)}
+                  >
                     <AddIcon /> Add situaiton
                   </Button>
                 </Grid>
-              }
+              )}
 
-              {
-                this.props.page == "situations" &&
+              {this.props.page == 'situations' && (
                 <Grid
                   container
                   spacing={24}
@@ -307,10 +386,9 @@ class CbtLayout extends React.Component {
                   })}
 
                 </Grid>
-              }
+              )}
 
-              {
-                this.props.page == "manage-situation" &&
+              {this.props.page == 'manage-situation' && (
                 <Grid
                   container
                   spacing={24}
@@ -349,98 +427,316 @@ class CbtLayout extends React.Component {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {situations && situations.map((situation, id) => (
+                      {situations && situations.map((situationData, id) => (
                         <TableRow key={id}>
                           <TableCell component="th" scope="row">
-                            {situation.situation_name}
+                            {situationData.situation_name}
                           </TableCell>
-                          <TableCell align="right">{situation.situation_description}</TableCell>
+                          <TableCell align="right">{situationData.situation_description}</TableCell>
                           <TableCell align="right">
-                            <Button onClick={() => this.props.store.view.openSituationDetailPage(situation._id)} >View</Button>
-                            <Button color={"primary"} onClick={() => this.openAddEditSituationModal()} >Edit</Button>
-                            <Button color={"secondary"} onClick={() => this.handleDialogOpen()} >Delete</Button>
+                            <Button onClick={() => this.props.store.view.openSituationDetailPage(situationData._id)} >View</Button>
+                            <Button color={"primary"} onClick={() => this.openAddEditSituationModal('edit', situationData._id)} >Edit</Button>
+                            <Button color={"secondary"} onClick={() => this.handleDeleteDialogOpen(situationData._id)} >Delete</Button>
                             
                           </TableCell>
-                          <Dialog
-                              open={this.state.dialogOpen}
-                              onClose={this.handleDialogClose}
-                              aria-labelledby="alert-dialog-title"
-                              aria-describedby="alert-dialog-description"
-                            >
-                              <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
-
-                              <DialogActions>
-                                <Button onClick={this.handleDialogClose} color="primary">
-                                  No
-                                </Button>
-                                <Button onClick={() => this.handleDialogConfirmManageSituations(situation._id)} color="primary" autoFocus>
-                                  Yes
-                                </Button>
-                              </DialogActions>
-                            </Dialog>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
-
                 </Grid>
-              }
+              )}
 
-              {
-                this.props.page == "situation-detail" &&
+              {this.props.page == 'situation-detail' && (
                 <React.Fragment>
-                  {situation &&
+                  {situation && (
                     <div className={classes.grid}>
-                      <Grid
-                        container
-                        spacing={24}
-                      >
+                      <Grid container spacing={24}>
                         <Grid item xs={10}>
-                          <Typography variant="title">{situation.situation_name}</Typography>
+                          <Typography variant="title">
+                            {situation.situation_name}
+                          </Typography>
                         </Grid>
                         <Grid item xs={1}>
-                          <Button variant="contained" color="primary" onClick={() => this.openAddEditSituationModal()}>Edit</Button>
-                        </Grid>
-                        <Grid item xs={1}>
-                          <Button variant="contained" color="secondary" onClick={() => this.handleDialogOpen()}>Delete</Button>
-                          <Dialog
-                            open={this.state.dialogOpen}
-                            onClose={this.handleDialogClose}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                              this.openAddEditSituationModal(
+                                'edit',
+                                situation._id
+                              )
+                            }
                           >
-                            <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
-
-                            <DialogActions>
-                              <Button onClick={this.handleDialogClose} color="primary">
-                                No
-                              </Button>
-                              <Button onClick={() => this.handleDialogConfirm(situation._id)} color="primary" autoFocus>
-                                Yes
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
+                            Edit
+                          </Button>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => this.handleDeleteDialogOpen(situation._id)}
+                          >
+                            Delete
+                          </Button>
                         </Grid>
 
                         <Grid item xs={12}>
-                          <Typography>{situation.situation_description}</Typography>
+                          <Typography>
+                            {situation.situation_description}
+                          </Typography>
                         </Grid>
-
                       </Grid>
-                    </div>}
+                    </div>
+                  )}
                 </React.Fragment>
-              }
-
+              )}
+              {this.props.page == 'run-simulation' && (
+                <React.Fragment>
+                  <div className="">
+                    <h1>Run Simulation</h1>
+                    <div className={classes.flexthis}>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                    </div>
+                  </div>
+                </React.Fragment>
+              )}
             </Card>
           </main>
         </div>
         {
+          this.state.openModal &&
           <AddEditSituationModalWrapped
-            modalTitle={this.state.addEditSituationModalMode == "ADD_MODE" ? "Add Situation" : "Edit Situation"}
+            key={Date.now().toString(36) + Math.random().toString(36).substring(2)}
+            modalTitle={
+              this.state.addEditSituationModalMode == 'ADD_MODE'
+                ? 'Add Situation'
+                : 'Edit Situation'
+            }
+            mode={this.state.addEditSituationModalMode}
+            situationId={this.state.selectedSituationId}
             open={this.state.openModal}
             closeModal={this.closeAddEditSituationModal}
+            viewStore={this.props.store.view}
+          ></AddEditSituationModalWrapped>
+        }
+        {
+          this.state.dialogOpen &&
+          <ConfirmationModal
+            dialogOpen={this.state.dialogOpen}
+            handleDialogClose={this.handleDialogClose}
+            modalTitle={"Delete Situation"}
+            handleDialogClose={this.handleDialogClose}
+            handleConfirmDeleteSituation={this.handleConfirmDeleteSituation}
+            selectedSituationId={this.state.selectedSituationId}
           >
-          </AddEditSituationModalWrapped>
+          </ConfirmationModal>
+        }
+        {
+          this.state.openSnackbar && 
+          <Snackbar
+            anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+            }}
+            open={this.state.openSnackbar}
+            autoHideDuration={3000}
+            onRequestClose={() => this.closeSnackBar()}
+        >
+            <SnackbarContent
+                message={
+                    <span id="message-id">
+                        {this.state.message}
+                    </span>
+                }
+            >
+                {this.state.message}
+            </SnackbarContent>
+        </Snackbar>
         }
       </React.Fragment>
     );

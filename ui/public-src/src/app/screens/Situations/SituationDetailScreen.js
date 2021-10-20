@@ -19,7 +19,7 @@ export default class SituationDetailScreen extends Component {
             <CbtLayout
                 page={this.props.store.view.page}
                 situations={this.props.store.situationsStore.items}
-                situation={this.props.store.SituationDetailStore.items}
+                situation={this.props.store.SituationDetailStore.item}
                 {...this.props}
             />
         )

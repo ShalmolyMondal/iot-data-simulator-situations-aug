@@ -17,4 +17,12 @@ export default class SituationsDetailScreenStore {
     delete(id) {
         this.appStore.SituationDetailStore.delete(id);
     }
+
+    update(id, params, callback) {
+        this.appStore.SituationDetailStore.update(id, params, callback);
+    }
+
+    create(params, callback) {
+        this.appStore.SituationDetailStore.create(params, callback);
+    }
 }

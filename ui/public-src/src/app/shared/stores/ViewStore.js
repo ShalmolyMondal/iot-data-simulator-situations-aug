@@ -81,9 +81,17 @@ export default class ViewStore {
         this.appStore.situationsDetailScreenStore.load(id);
     };
 
+    createSituation = (params, callback) => {
+        this.appStore.situationsDetailScreenStore.create(params, callback);
+        console.log(callback);
+    };
+
+    updateSituation = (id, params, callback) => {
+        this.appStore.situationsDetailScreenStore.update(id, params, callback);
+        console.log(callback);
+    };
+
     deleteSituation = (id) => {
-        // this.page = "situation-detail";
-        // this.currentTab = 6;
         this.appStore.situationsDetailScreenStore.delete(id);
     };
 
