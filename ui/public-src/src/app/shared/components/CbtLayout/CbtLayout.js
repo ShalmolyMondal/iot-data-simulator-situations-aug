@@ -667,6 +667,7 @@ class CbtLayout extends React.Component {
         </div>
         {
           <AddEditSituationModalWrapped
+            key={Date.now().toString(36) + Math.random().toString(36).substring(2)}
             modalTitle={
               this.state.addEditSituationModalMode == 'ADD_MODE'
                 ? 'Add Situation'
