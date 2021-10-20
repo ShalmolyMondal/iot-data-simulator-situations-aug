@@ -25,6 +25,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 
 const drawerWidth = 240;
 
@@ -118,6 +124,10 @@ const styles = theme => ({
   // main content
   button: {
     margin: theme.spacing.unit,
+    width: "100%"
+  },
+  btn: {
+    width: "100%"
   },
   input: {
     display: 'none',
@@ -128,14 +138,15 @@ const styles = theme => ({
   },
   card: {
     minWidth: 275,
-    minHeight: 'calc(100vh - 120px)'
+    minHeight: 'calc(100vh - 120px)',
+    padding: "inherit"
   },
+
 });
 
 class CbtLayout extends React.Component {
   constructor(props) {
     super(props);
-    console.log("111111111111", props);
   }
 
   state = {
@@ -181,6 +192,12 @@ class CbtLayout extends React.Component {
     this.props.store.view.deleteSituation(id);
     this.setState({ dialogOpen: false });
     this.props.store.view.openSituationsPage();
+  }
+
+  handleDialogConfirmManageSituations = (id) => {
+    this.props.store.view.deleteSituation(id);
+    this.setState({ dialogOpen: false });
+    this.props.store.view.openSituationManagePage();
   }
 
 
@@ -242,7 +259,6 @@ class CbtLayout extends React.Component {
           <main className={classes.content}>
             <div className={classes.appBarSpacer} />
             <Card className={classes.card}>
-              {this.props.page}
 
               {/* {this.props.page} */}
               {this.props.page == "add-situation" &&
@@ -274,7 +290,7 @@ class CbtLayout extends React.Component {
                     return (
                       <Grid item xs={4} key={id}>
                         <Card >
-                          <Button>
+                          <Button className={classes.btn} >
                             <CardContent>
                               <NotificationsIcon />
                               <Typography variant="h4" component="div">
@@ -300,13 +316,13 @@ class CbtLayout extends React.Component {
                   spacing={24}
                   alignItems="center"
                 >
-                  {situations && situations.map((situation, id) => {
+                  {/* {situations && situations.map((situation, id) => {
                     return (
 
                       <Grid item xs={4} key={id}>
 
                         <Card >
-                          <Button onClick={()=>this.props.store.view.openSituationDetailPage(situation._id)}>
+                          <Button className={classes.btn} onClick={() => this.props.store.view.openSituationDetailPage(situation._id)}>
                             <CardContent>
                               <NotificationsIcon />
                               <Typography variant="h4" component="div">
@@ -322,7 +338,50 @@ class CbtLayout extends React.Component {
                       </Grid>
 
                     )
-                  })}
+                  })} */}
+
+                  <Table className={classes.table}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Situation Name</TableCell>
+                        <TableCell align="right">Situation Description</TableCell>
+                        <TableCell align="right">Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {situations && situations.map((situation, id) => (
+                        <TableRow key={id}>
+                          <TableCell component="th" scope="row">
+                            {situation.situation_name}
+                          </TableCell>
+                          <TableCell align="right">{situation.situation_description}</TableCell>
+                          <TableCell align="right">
+                            <Button onClick={() => this.props.store.view.openSituationDetailPage(situation._id)} >View</Button>
+                            <Button color={"primary"} onClick={() => this.openAddEditSituationModal()} >Edit</Button>
+                            <Button color={"secondary"} onClick={() => this.handleDialogOpen()} >Delete</Button>
+                            
+                          </TableCell>
+                          <Dialog
+                              open={this.state.dialogOpen}
+                              onClose={this.handleDialogClose}
+                              aria-labelledby="alert-dialog-title"
+                              aria-describedby="alert-dialog-description"
+                            >
+                              <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
+
+                              <DialogActions>
+                                <Button onClick={this.handleDialogClose} color="primary">
+                                  No
+                                </Button>
+                                <Button onClick={() => this.handleDialogConfirmManageSituations(situation._id)} color="primary" autoFocus>
+                                  Yes
+                                </Button>
+                              </DialogActions>
+                            </Dialog>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
 
                 </Grid>
               }
@@ -343,7 +402,7 @@ class CbtLayout extends React.Component {
                           <Button variant="contained" color="primary" onClick={() => this.openAddEditSituationModal()}>Edit</Button>
                         </Grid>
                         <Grid item xs={1}>
-                          <Button variant="contained" color="secondary" onClick={()=>this.handleDialogOpen()}>Delete</Button>
+                          <Button variant="contained" color="secondary" onClick={() => this.handleDialogOpen()}>Delete</Button>
                           <Dialog
                             open={this.state.dialogOpen}
                             onClose={this.handleDialogClose}
@@ -351,12 +410,12 @@ class CbtLayout extends React.Component {
                             aria-describedby="alert-dialog-description"
                           >
                             <DialogTitle id="alert-dialog-title">{"Are you sure want to delete?"}</DialogTitle>
-                            
+
                             <DialogActions>
                               <Button onClick={this.handleDialogClose} color="primary">
                                 No
                               </Button>
-                              <Button onClick={()=>this.handleDialogConfirm(situation._id)} color="primary" autoFocus>
+                              <Button onClick={() => this.handleDialogConfirm(situation._id)} color="primary" autoFocus>
                                 Yes
                               </Button>
                             </DialogActions>
