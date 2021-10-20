@@ -386,19 +386,24 @@ class AddEditSituationModal extends React.Component {
       context_attributes: this.state.context_attributes,
     };
     if (this.props.mode == 'EDIT_MODE') {
-      API.put('/situation/update/' + this.props.situationId, {
-        situationData: situationPayload,
-      }).then((res) => {
-        console.log(res);
-        this.handleClose("Situation Updated successfully");
-      });
+      this.props.viewStore.updateSituation(this.props.situationId, {situationData: situationPayload}, this.handleClose);
+      
+      // API.patch('/situation/update/' + this.props.situationId, {
+      //   situationData: {situationData: situationPayload},
+      // }).then((res) => {
+      //   console.log(res);
+      //   this.appStore.situationsManageScreenStore.load();
+      //   this.handleClose("Situation Updated successfully");
+      // });
     } else {
-      API.post('/situation/create', {
-        situationData: situationPayload,
-      }).then((res) => {
-        console.log(res);
-        this.handleClose("Situation created successfully");
-      });
+      this.props.viewStore.createSituation({situationData: situationPayload}, this.handleClose);
+      // API.post('/situation/create', {
+      //   situationData: situationPayload,
+      // }).then((res) => {
+      //   console.log(res);
+      //   this.appStore.situationsManageScreenStore.load();
+      //   this.handleClose("Situation created successfully");
+      // });
     }
   };
 
@@ -811,7 +816,7 @@ class AddEditSituationModal extends React.Component {
               onClick={this.handleAddEditSituation}
               color="primary"
             >
-              Add Situation
+              {this.props.mode == 'EDIT_MODE' ? "Save Situation" : "Add Situation"}
             </Button>
           </DialogActions>
         </Dialog>

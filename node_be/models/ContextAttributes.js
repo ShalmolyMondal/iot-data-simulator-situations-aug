@@ -14,6 +14,11 @@ const ContextAttributesSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    unit: {
+        type: String,
+        required: false,
+        default: null
+    },
     data_values: [DataValuesSchema],
 });
 

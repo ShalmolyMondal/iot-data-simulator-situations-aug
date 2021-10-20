@@ -36,7 +36,8 @@ import SessionsScreenStore from "stores/screen/SessionsScreenStore";
 import SituationsScreenStore from "stores/screen/SituationsScreenStore";
 import SituationsManageScreenStore from "stores/screen/SituationsManageScreenStore";
 import SituationsDetailScreenStore from "stores/screen/SituationsDetailScreenStore";
-
+import SituationsAddScreenStore from "stores/screen/SituationsAddScreenStore";
+import SimulationRunScreenStore from "./screen/SimulationRunScreenStore";
 
 import SituationsStore from "./situation/SituationsStore";
 
@@ -316,8 +317,9 @@ export default class AppStore {
         this.situationsScreenStore = new SituationsScreenStore(this);
         this.situationsManageScreenStore = new SituationsManageScreenStore(this);
         this.situationsDetailScreenStore = new SituationsDetailScreenStore(this);
-
+        this.situationsAddScreenStore = new SituationsAddScreenStore(this);
         this.situationsStore = new SituationsStore(this);
+        this.simulationRunScreenStore = new SimulationRunScreenStore(this);
 
         this.situationAddStore = new SituationAddStore(this);
         this.SituationDetailStore = new SituationDetailStore(this);

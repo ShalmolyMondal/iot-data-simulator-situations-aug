@@ -55,12 +55,11 @@ export default class SituationDetailStore {
     }
 
     getAll() {
-        console.log("...loading situations systems");
-        return this.appStore.transportLayer
-            .get("/api/systems")
+        console.log('...loading situation');
+        return API.get('/situation/all')
             .then(({ data = [] }) => {
-                console.log("target systems loaded: ", data);
-                this.items = data.map(targetSystemFactory);
+                console.log('devices loaded: ', data);
+                this.items = data;
             });
     }
 
@@ -77,18 +76,26 @@ export default class SituationDetailStore {
         return result;
     }
 
-    create(params) {
-        return this.appStore.transportLayer.post("/api/systems", {
+    create(params, callback) {
+        return API.post("/situation/create", {
             ...params
+        })
+        .then((res) => {
+            this.appStore.situationsManageScreenStore.load();
+            callback("Situation created successfully");
         });
     }
 
-    update(systemId, params) {
-        if (!systemId) {
+    update(situationId, params, callback) {
+        if (!situationId) {
             return this.create(params);
         }
-        return this.appStore.transportLayer.put(`/api/systems/${systemId}`, {
+        return API.patch(`/situation/update/${situationId}`, {
             ...params
+        })
+        .then((res) => {
+            this.appStore.situationsManageScreenStore.load();
+            callback("Situation updated successfully");
         });
     }
 
@@ -96,7 +103,7 @@ export default class SituationDetailStore {
         return API
         .delete(`/situation/delete/${Id}`)
         .then(({ data }) => {
-            this.items = data;
+            this.appStore.situationsManageScreenStore.load();
         });
     }
 
