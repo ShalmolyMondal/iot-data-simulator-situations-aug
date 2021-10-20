@@ -235,7 +235,17 @@ const DialogTitle = withStyles((theme) => ({
 
 class AddEditSituationModal extends React.Component {
   constructor(props) {
+    console.log('cons', props)
     super(props);
+    console.log('cons', props)
+    this.state = {
+      values: false,
+      fullScreen: false,
+      expanded: 1,
+      situation_name: '',
+      situation_description: '',
+      context_attributes: [{ ...DEFAULT_VALUES.CONTEXT_ATTRIBUTE }],
+    };
   }
 
   handleClose = (message = '') => {
@@ -249,14 +259,7 @@ class AddEditSituationModal extends React.Component {
     this.props.closeModal(message);
   };
 
-  state = {
-    values: false,
-    fullScreen: false,
-    expanded: 1,
-    situation_name: '',
-    situation_description: '',
-    context_attributes: [{ ...DEFAULT_VALUES.CONTEXT_ATTRIBUTE }],
-  };
+  
 
   handleChange = (name) => (event) => {
     this.setState({
@@ -380,7 +383,7 @@ class AddEditSituationModal extends React.Component {
       situationData: situationPayload,
     }).then((res) => {
       console.log(res);
-      this.handleClose();
+      this.handleClose("Situation created successfully");
     });
   };
 
@@ -396,16 +399,18 @@ class AddEditSituationModal extends React.Component {
     });
   }
 
-  // {
-  //   console.log('@@%@@^', this.props.mode);
-  //   this.props.mode == 'EDIT_MODE' &&
-  //     this.props.situationId &&
-  //     this.populateFormData(this.props.situationId);
-  // }
+  load() {
+    console.log('@@%@@^', this.props.mode);
+    this.props.mode == 'EDIT_MODE' &&
+      this.props.situationId &&
+      this.populateFormData(this.props.situationId);
+  }
+
 
   render() {
     const { classes } = this.props;
-
+    console.log(this.props)
+    
     return (
       <div>
         <Dialog
@@ -415,11 +420,11 @@ class AddEditSituationModal extends React.Component {
           maxWidth="md"
           fullWidth={true}
           open={this.props.open ? true : false}
-          onClose={this.handleClose}
+          onClose={() => this.handleClose('')}
         >
           <DialogTitle
             id="customized-dialog-title"
-            onClose={this.handleClose}
+            onClose={() => this.handleClose('')}
             handleToggleFullScreen={this.handleToggleFullScreen}
             fullScreen={this.state.fullScreen}
           >
@@ -468,7 +473,7 @@ class AddEditSituationModal extends React.Component {
                     </Typography>
                     {this.state.context_attributes.map((ca, index) => {
                       return (
-                        <div className={classes.contextAttribute}>
+                        <div className={classes.contextAttribute} key={index}>
                           <ExpansionPanel
                             square
                             // defaultExpanded={this.state.context_attributes.length == 1}
@@ -792,7 +797,7 @@ class AddEditSituationModal extends React.Component {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={() => this.handleClose('')} color="primary">
               Cancel
             </Button>
             <Button

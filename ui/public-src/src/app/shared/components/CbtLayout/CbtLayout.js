@@ -673,12 +673,12 @@ class CbtLayout extends React.Component {
                 : 'Edit Situation'
             }
             mode={this.state.addEditSituationModalMode}
-            situationId={this.state.situationId}
+            situationId={situation ? situation._id : null}
             open={this.state.openModal}
             closeModal={this.closeAddEditSituationModal}
           ></AddEditSituationModalWrapped>
         }
-        {
+        {/* {
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
@@ -688,9 +688,9 @@ class CbtLayout extends React.Component {
             ContentProps={{
               'aria-describedby': 'message-id',
             }}
-            message={<span id="message-id">{this.state.message}</span>}
+            message={<span id="message-id">{this.state.message ? this.state.message : ""}</span>}
           />
-        }
+        } */}
       </React.Fragment>
     );
   }

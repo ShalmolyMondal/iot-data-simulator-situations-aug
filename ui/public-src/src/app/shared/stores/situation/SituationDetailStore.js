@@ -12,6 +12,7 @@ export default class SituationDetailStore {
     };
 
     @observable.ref items;
+    @observable item;
     @observable nameFilter = "";
     @observable typeFilter = this.filterTypes.all;
 
@@ -103,7 +104,7 @@ export default class SituationDetailStore {
         return API
             .get(`/situation/get/${Id}`)
             .then(({ data }) => {
-                this.items = data;
+                this.item = data;
             });
     }
 }
