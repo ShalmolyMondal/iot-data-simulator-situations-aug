@@ -84,6 +84,7 @@ export default class ViewStore {
     createSituation = (params, callback) => {
         this.appStore.situationsDetailScreenStore.create(params, callback);
         console.log(callback);
+        this.appStore.situationsScreenStore.load();
     };
 
     updateSituation = (id, params, callback) => {
