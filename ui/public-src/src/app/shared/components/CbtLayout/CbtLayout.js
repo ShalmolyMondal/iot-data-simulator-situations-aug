@@ -43,6 +43,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import RunSituationSimulation from '../RunSituaitonSimulation/RunSituationSimulation';
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -262,10 +263,6 @@ class CbtLayout extends React.Component {
   } 
   render() {
     const { classes, situations, situation } = this.props;
-
-    console.log("-----------Situations-----------", situations);
-
-
     const ShowDetail = (id) => <div>Some Results</div>;
 
     return (
@@ -492,197 +489,7 @@ class CbtLayout extends React.Component {
               )}
               {this.props.page == 'run-simulation' && (
                 <React.Fragment>
-                  <div className="">
-                    <h1>Run Simulation</h1>
-                    <div className={classes.flexthis}>
-                      <Card className={classes.simulationCard}>
-                        <CardHeader
-                          avatar={
-                            <Avatar
-                              aria-label="Recipe"
-                              className={classes.avatar}
-                            >
-                              R
-                            </Avatar>
-                          }
-                          action={
-                            <IconButton>
-                              <MoreVertIcon />
-                            </IconButton>
-                          }
-                          title="Room is hot"
-                          subheader="Some desc..."
-                        />
-                        <CardContent>
-                          <Typography component="p">
-                            This impressive paella is a perfect party dish and a
-                            fun meal to cook together with your guests. Add 1
-                            cup of frozen peas along with the mussels, if you
-                            like.
-                          </Typography>
-                        </CardContent>
-                        <CardActions
-                          className={classes.actions}
-                          disableActionSpacing
-                        ></CardActions>
-                        <Collapse
-                          in={this.state.expanded}
-                          timeout="auto"
-                          unmountOnExit
-                        >
-                          <CardContent>
-                            <Typography paragraph>Method:</Typography>
-                            <Typography paragraph>
-                              Heat 1/2 cup of the broth in a pot until
-                              simmering, add saffron and set aside for 10
-                              minutes.
-                            </Typography>
-                            <Typography paragraph>
-                              Heat oil in a (14- to 16-inch) paella pan or a
-                              large, deep skillet over medium-high heat. Add
-                              chicken, shrimp and chorizo, and cook, stirring
-                              occasionally until lightly browned, 6 to 8
-                              minutes. Transfer shrimp to a large plate and set
-                              aside, boil.
-                            </Typography>
-                            <Typography paragraph>
-                              Add rice and stir very gently to distribute. Top
-                              with artichokes and peppers, and cook without
-                              stirring, until most of the liquid is absorbed, 15
-                            </Typography>
-                            <Typography>
-                              Set aside off of the heat to let rest for 10
-                              minutes, and then serve.
-                            </Typography>
-                          </CardContent>
-                        </Collapse>
-                      </Card>
-                      <Card className={classes.simulationCard}>
-                        <CardHeader
-                          avatar={
-                            <Avatar
-                              aria-label="Recipe"
-                              className={classes.avatar}
-                            >
-                              R
-                            </Avatar>
-                          }
-                          action={
-                            <IconButton>
-                              <MoreVertIcon />
-                            </IconButton>
-                          }
-                          title="Room is hot"
-                          subheader="Some desc..."
-                        />
-                        <CardContent>
-                          <Typography component="p">
-                            This impressive paella is a perfect party dish and a
-                            fun meal to cook together with your guests. Add 1
-                            cup of frozen peas along with the mussels, if you
-                            like.
-                          </Typography>
-                        </CardContent>
-                        <CardActions
-                          className={classes.actions}
-                          disableActionSpacing
-                        ></CardActions>
-                        <Collapse
-                          in={this.state.expanded}
-                          timeout="auto"
-                          unmountOnExit
-                        >
-                          <CardContent>
-                            <Typography paragraph>Method:</Typography>
-                            <Typography paragraph>
-                              Heat 1/2 cup of the broth in a pot until
-                              simmering, add saffron and set aside for 10
-                              minutes.
-                            </Typography>
-                            <Typography paragraph>
-                              Heat oil in a (14- to 16-inch) paella pan or a
-                              large, deep skillet over medium-high heat. Add
-                              chicken, shrimp and chorizo, and cook, stirring
-                              occasionally until lightly browned, 6 to 8
-                              minutes. Transfer shrimp to a large plate and set
-                              aside, boil.
-                            </Typography>
-                            <Typography paragraph>
-                              Add rice and stir very gently to distribute. Top
-                              with artichokes and peppers, and cook without
-                              stirring, until most of the liquid is absorbed, 15
-                            </Typography>
-                            <Typography>
-                              Set aside off of the heat to let rest for 10
-                              minutes, and then serve.
-                            </Typography>
-                          </CardContent>
-                        </Collapse>
-                      </Card>
-                      <Card className={classes.simulationCard}>
-                        <CardHeader
-                          avatar={
-                            <Avatar
-                              aria-label="Recipe"
-                              className={classes.avatar}
-                            >
-                              R
-                            </Avatar>
-                          }
-                          action={
-                            <IconButton>
-                              <MoreVertIcon />
-                            </IconButton>
-                          }
-                          title="Room is hot"
-                          subheader="Some desc..."
-                        />
-                        <CardContent>
-                          <Typography component="p">
-                            This impressive paella is a perfect party dish and a
-                            fun meal to cook together with your guests. Add 1
-                            cup of frozen peas along with the mussels, if you
-                            like.
-                          </Typography>
-                        </CardContent>
-                        <CardActions
-                          className={classes.actions}
-                          disableActionSpacing
-                        ></CardActions>
-                        <Collapse
-                          in={this.state.expanded}
-                          timeout="auto"
-                          unmountOnExit
-                        >
-                          <CardContent>
-                            <Typography paragraph>Method:</Typography>
-                            <Typography paragraph>
-                              Heat 1/2 cup of the broth in a pot until
-                              simmering, add saffron and set aside for 10
-                              minutes.
-                            </Typography>
-                            <Typography paragraph>
-                              Heat oil in a (14- to 16-inch) paella pan or a
-                              large, deep skillet over medium-high heat. Add
-                              chicken, shrimp and chorizo, and cook, stirring
-                              occasionally until lightly browned, 6 to 8
-                              minutes. Transfer shrimp to a large plate and set
-                              aside, boil.
-                            </Typography>
-                            <Typography paragraph>
-                              Add rice and stir very gently to distribute. Top
-                              with artichokes and peppers, and cook without
-                              stirring, until most of the liquid is absorbed, 15
-                            </Typography>
-                            <Typography>
-                              Set aside off of the heat to let rest for 10
-                              minutes, and then serve.
-                            </Typography>
-                          </CardContent>
-                        </Collapse>
-                      </Card>
-                    </div>
-                  </div>
+                  <RunSituationSimulation situationList={situations}/>
                 </React.Fragment>
               )}
             </Card>
