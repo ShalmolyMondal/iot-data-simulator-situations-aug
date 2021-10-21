@@ -4,27 +4,26 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { mainListItems, secondaryListItems } from './listItems';
 import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituationModal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Snackbar, { SnackbarContent } from "material-ui/Snackbar";
-
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -34,13 +33,9 @@ import TableRow from '@material-ui/core/TableRow';
 
 
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import RunSituationSimulation from '../RunSituaitonSimulation/RunSituationSimulation';
@@ -136,7 +131,7 @@ const styles = (theme) => ({
   // main content
   button: {
     margin: theme.spacing.unit,
-    width: "100%"
+    // width: "100%"
   },
   btn: {
     width: "100%"
@@ -235,7 +230,7 @@ class CbtLayout extends React.Component {
   };
 
   handleDeleteDialogOpen = (situationId) => {
-    this.setState({ 
+    this.setState({
       dialogOpen: true,
       selectedSituationId: situationId,
     });
@@ -247,7 +242,7 @@ class CbtLayout extends React.Component {
 
   handleConfirmDeleteSituation = (id) => {
     this.props.store.view.deleteSituation(id);
-    this.setState({ 
+    this.setState({
       dialogOpen: false,
       selectedSituationId: null,
       message: "Deleted situation successfully",
@@ -257,51 +252,20 @@ class CbtLayout extends React.Component {
   }
 
   closeSnackBar = () => {
-    this.setState({ 
+    this.setState({
       message: null,
-      openSnackbar: false });
-  } 
+      openSnackbar: false
+    });
+  }
   render() {
     const { classes, situations, situation } = this.props;
-    const ShowDetail = (id) => <div>Some Results</div>;
+
+    console.log("-----------Situations-----------", situations);
 
     return (
       <React.Fragment>
         <CssBaseline />
         <div className={classes.root}>
-          <AppBar
-            position="absolute"
-            className={classNames(
-              classes.appBar,
-              this.state.open && classes.appBarShift
-            )}
-          >
-            <Toolbar
-              disableGutters={!this.state.open}
-              className={classes.toolbar}
-            >
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(
-                  classes.menuButton,
-                  this.state.open && classes.menuButtonHidden
-                )}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography
-                variant="title"
-                color="inherit"
-                noWrap
-                className={classes.title}
-              >
-                IOT PROJECT
-              </Typography>
-              <IconButton color="inherit"></IconButton>
-            </Toolbar>
-          </AppBar>
           <Drawer
             variant="permanent"
             classes={{
@@ -316,21 +280,26 @@ class CbtLayout extends React.Component {
               <strong className={classes.sidebarHeader}>
                 IoT Benchmark Tool
               </strong>
-              <IconButton onClick={this.handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
             </div>
             <Divider />
-            <List>{mainListItems(this.props, situations)}</List>
+            <List>
+              <ListItem button onClick={() => this.props.store.view.openSituationsPage()}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItem>
+            </List>
+            <Divider />
+            {situations && situations.length > 0 && <List>{mainListItems(this.props, situations)}</List>}
             <Divider />
 
-            <List>{secondaryListItems(this.props)}</List>
+            <List>{secondaryListItems(this.props, this.openAddEditSituationModal)}</List>
           </Drawer>
           <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
+
             <Card className={classes.card}>
 
-              {/* {this.props.page} */}
               {this.props.page == 'add-situation' && (
                 <Grid
                   container
@@ -362,25 +331,50 @@ class CbtLayout extends React.Component {
                   spacing={24}
                   alignItems="center"
                 >
-                  {situations && situations.map((situation, id) => {
-                    return (
-                      <Grid item xs={4} key={id}>
-                        <Card >
-                          <Button className={classes.btn} >
-                            <CardContent>
-                              <NotificationsIcon />
-                              <Typography variant="h4" component="div">
-                                {situation.situation_name}
-                              </Typography>
-                              <Typography variant="body2">
-                                {situation.situation_description}
-                              </Typography>
-                            </CardContent>
-                          </Button>
-                        </Card>
-                      </Grid>
-                    )
-                  })}
+
+                  {situations && situations.length > 0 ?
+                    situations.map((situation, id) => {
+                      return (
+                        <Grid item xs={4} key={id}>
+                          <Card >
+                            <Button className={classes.btn} onClick={() => this.props.store.view.openSituationDetailPage(situation._id)} >
+                              <CardContent>
+                                <NotificationsIcon />
+                                <Typography variant="h4" component="div">
+                                  {situation.situation_name}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {situation.situation_description}
+                                </Typography>
+                              </CardContent>
+                            </Button>
+                          </Card>
+                        </Grid>
+                      )
+                    }) :
+                    <Grid
+                      container
+                      spacing={0}
+                      direction="column"
+                      alignItems="center"
+                      justify="center"
+                    >
+                      <div className={classes.appBarSpacer} />
+                      <div className={classes.appBarSpacer} />
+                      <div className={classes.appBarSpacer} />
+                      <div className={classes.noContentText}>
+                        No situation to display
+                      </div>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        className={classes.button}
+                        onClick={() => this.openAddEditSituationModal('add', null)}
+                      >
+                        <AddIcon /> Add situaiton
+                      </Button>
+                    </Grid>
+                  }
 
                 </Grid>
               )}
@@ -391,30 +385,6 @@ class CbtLayout extends React.Component {
                   spacing={24}
                   alignItems="center"
                 >
-                  {/* {situations && situations.map((situation, id) => {
-                    return (
-
-                      <Grid item xs={4} key={id}>
-
-                        <Card >
-                          <Button className={classes.btn} onClick={() => this.props.store.view.openSituationDetailPage(situation._id)}>
-                            <CardContent>
-                              <NotificationsIcon />
-                              <Typography variant="h4" component="div">
-                                {situation.situation_name}
-                              </Typography>
-                              <Typography variant="body2">
-                                {situation.situation_description}
-                              </Typography>
-                            </CardContent>
-                          </Button>
-                        </Card>
-
-                      </Grid>
-
-                    )
-                  })} */}
-
                   <Table className={classes.table}>
                     <TableHead>
                       <TableRow>
@@ -434,7 +404,7 @@ class CbtLayout extends React.Component {
                             <Button onClick={() => this.props.store.view.openSituationDetailPage(situationData._id)} >View</Button>
                             <Button color={"primary"} onClick={() => this.openAddEditSituationModal('edit', situationData._id)} >Edit</Button>
                             <Button color={"secondary"} onClick={() => this.handleDeleteDialogOpen(situationData._id)} >Delete</Button>
-                            
+
                           </TableCell>
                         </TableRow>
                       ))}
@@ -482,6 +452,110 @@ class CbtLayout extends React.Component {
                             {situation.situation_description}
                           </Typography>
                         </Grid>
+                        <Grid item xs={12}>
+                          <Card className={classes.card}>
+                            <Grid item xs={12}>
+                              <Typography variant="title">
+                                Context Attributes
+                              </Typography>
+                            </Grid>
+                            <Divider />
+
+                            <Grid container className={classes.grid} >
+                              {situation.context_attributes && situation.context_attributes.map((attribute, id) => (
+                                <React.Fragment key={id}>
+                                  <Grid item xs={4} className={classes.grid}>
+                                    <Typography >
+                                      Name
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={8} className={classes.grid}>
+                                    <Typography >
+                                      {attribute.context_attribute_name}
+                                    </Typography>
+                                  </Grid>
+                                  <Grid item xs={4} className={classes.grid}>
+                                    <Typography>Description</Typography>
+                                  </Grid>
+                                  <Grid item xs={8} className={classes.grid}>
+                                    <Typography>{attribute.context_attribute_description}</Typography>
+                                  </Grid>
+                                  <Grid item xs={4} className={classes.grid}>
+                                    <Typography>Weight</Typography>
+                                  </Grid>
+                                  <Grid item xs={8} className={classes.grid}>
+                                    <Typography>
+                                      {attribute.weight}
+                                    </Typography>
+                                  </Grid>
+                                  {attribute.data_values && attribute.data_values.map((data_value, data_valueID) => (
+                                    <React.Fragment key={data_valueID} >
+                                      <Grid item xs={4} className={classes.grid}>
+                                        <Typography>Contribution</Typography>
+                                      </Grid>
+                                      <Grid item xs={8} className={classes.grid}>
+                                        <Typography>
+                                          {data_value.contribution}
+                                        </Typography>
+                                      </Grid>
+                                      <Grid item xs={4} className={classes.grid}>
+                                        <Typography>Range Type</Typography>
+                                      </Grid>
+                                      <Grid item xs={8} className={classes.grid}>
+                                        <Typography>
+                                          {data_value.range_type}
+                                        </Typography>
+                                      </Grid>
+                                      {data_value.range_values && (<React.Fragment>
+                                        <Grid item xs={12} className={classes.grid}>
+                                          <Typography><strong>Range Values</strong></Typography>
+                                        </Grid>
+
+                                        {data_value.range_values && (
+                                          <React.Fragment>
+                                            <Grid item xs={4} className={classes.grid}>
+                                              <Typography>Lower Bound</Typography>
+                                            </Grid>
+                                            <Grid item xs={8} className={classes.grid}>
+                                              <Typography>
+                                                {data_value.range_values.lower_bound}
+                                              </Typography>
+                                            </Grid>
+                                            <Grid item xs={4} className={classes.grid}>
+                                              <Typography>Higher Bound</Typography>
+                                            </Grid>
+                                            <Grid item xs={8} className={classes.grid}>
+                                              <Typography>
+                                                {data_value.range_values.higher_bound}
+                                              </Typography>
+                                            </Grid>
+                                            {data_value.range_values.multiple_values && data_value.range_values.multiple_values.length>0 && (
+                                              <React.Fragment>
+                                                <Grid item xs={4} className={classes.grid}>
+                                                  <Typography>Multiple Values</Typography>
+                                                </Grid>
+                                                <Grid item xs={8} className={classes.grid}>
+                                                  {data_value.range_values.multiple_values && data_value.range_values.multiple_values.map((value, valueId) => (
+
+                                                    <Typography>
+                                                      {value}
+                                                    </Typography>
+
+                                                  ))}
+                                                </Grid>
+                                              </React.Fragment>
+                                            )}
+                                          </React.Fragment>
+                                        )}
+                                      </React.Fragment>)}
+                                    </React.Fragment>
+                                  ))}
+                                </React.Fragment>
+                              ))}
+                            </Grid>
+                          </Card>
+                        </Grid>
+
                       </Grid>
                     </div>
                   )}
@@ -489,7 +563,198 @@ class CbtLayout extends React.Component {
               )}
               {this.props.page == 'run-simulation' && (
                 <React.Fragment>
-                  <RunSituationSimulation situationList={situations}/>
+                  <RunSituationSimulation situationList={situations} />
+                  <div className="">
+                    <h1>Run Simulation</h1>
+                    <div className={classes.flexthis}>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                      <Card className={classes.simulationCard}>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              aria-label="Recipe"
+                              className={classes.avatar}
+                            >
+                              R
+                            </Avatar>
+                          }
+                          action={
+                            <IconButton>
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title="Room is hot"
+                          subheader="Some desc..."
+                        />
+                        <CardContent>
+                          <Typography component="p">
+                            This impressive paella is a perfect party dish and a
+                            fun meal to cook together with your guests. Add 1
+                            cup of frozen peas along with the mussels, if you
+                            like.
+                          </Typography>
+                        </CardContent>
+                        <CardActions
+                          className={classes.actions}
+                          disableActionSpacing
+                        ></CardActions>
+                        <Collapse
+                          in={this.state.expanded}
+                          timeout="auto"
+                          unmountOnExit
+                        >
+                          <CardContent>
+                            <Typography paragraph>Method:</Typography>
+                            <Typography paragraph>
+                              Heat 1/2 cup of the broth in a pot until
+                              simmering, add saffron and set aside for 10
+                              minutes.
+                            </Typography>
+                            <Typography paragraph>
+                              Heat oil in a (14- to 16-inch) paella pan or a
+                              large, deep skillet over medium-high heat. Add
+                              chicken, shrimp and chorizo, and cook, stirring
+                              occasionally until lightly browned, 6 to 8
+                              minutes. Transfer shrimp to a large plate and set
+                              aside, boil.
+                            </Typography>
+                            <Typography paragraph>
+                              Add rice and stir very gently to distribute. Top
+                              with artichokes and peppers, and cook without
+                              stirring, until most of the liquid is absorbed, 15
+                            </Typography>
+                            <Typography>
+                              Set aside off of the heat to let rest for 10
+                              minutes, and then serve.
+                            </Typography>
+                          </CardContent>
+                        </Collapse>
+                      </Card>
+                    </div>
+                  </div>
                 </React.Fragment>
               )}
             </Card>
@@ -524,26 +789,30 @@ class CbtLayout extends React.Component {
           </ConfirmationModal>
         }
         {
-          this.state.openSnackbar && 
+          this.state.openSnackbar &&
           <Snackbar
             anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left"
+              vertical: 'bottom',
+              horizontal: 'left',
             }}
             open={this.state.openSnackbar}
-            autoHideDuration={3000}
-            onRequestClose={() => this.closeSnackBar()}
-        >
-            <SnackbarContent
-                message={
-                    <span id="message-id">
-                        {this.state.message}
-                    </span>
-                }
-            >
-                {this.state.message}
-            </SnackbarContent>
-        </Snackbar>
+            autoHideDuration={6000}
+            onClose={this.closeSnackBar}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.message}</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.closeSnackBar}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
         }
       </React.Fragment>
     );

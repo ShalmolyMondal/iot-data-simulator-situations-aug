@@ -13,6 +13,6 @@ export default class SituationsScreenStore {
     }
 
     load() {
-        this.appStore.situationsStore.getAll();
+        this.appStore.SituationManageStore.getAll();
     }
 }
