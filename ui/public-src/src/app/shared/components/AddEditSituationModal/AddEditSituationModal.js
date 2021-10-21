@@ -396,7 +396,7 @@ class AddEditSituationModal extends React.Component {
       //   this.handleClose("Situation Updated successfully");
       // });
     } else {
-      this.props.viewStore.createSituation({situationData: situationPayload}, this.handleClose);
+      this.props.viewStore.createSituation({situationData: situationPayload}, this.handleClose);    
       // API.post('/situation/create', {
       //   situationData: situationPayload,
       // }).then((res) => {

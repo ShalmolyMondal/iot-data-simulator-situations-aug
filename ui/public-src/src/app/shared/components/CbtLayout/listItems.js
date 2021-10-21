@@ -16,6 +16,7 @@ import ViewStore from '../../stores/ViewStore';
 
 export const mainListItems = (props, situations) => {
   console.log("===mainListItems===", situations)
+  console.log("===mainListItems===props========", props.store)
 
 
   return <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
@@ -36,7 +37,6 @@ export const mainListItems = (props, situations) => {
 };
 
 export const secondaryListItems = (props, callback) => {
-  console.log("Props from list item", props)
   return (
 
     <div>
