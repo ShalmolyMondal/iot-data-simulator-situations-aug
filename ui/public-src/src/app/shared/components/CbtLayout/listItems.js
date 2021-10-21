@@ -14,53 +14,51 @@ import { FAKE_DATA } from '../../constants/fakeData';
 import ViewStore from '../../stores/ViewStore';
 // import FAKE_DATA from '../../constants/fakeData';
 
-export const mainListItems = (props,situations) => {
-  console.log("===mainListItems===",situations)
+export const mainListItems = (props, situations) => {
+  console.log("===mainListItems===", situations)
 
 
-    return <div>
-        <ListItem button onClick={()=> props.store.view.openSituationsPage()}>
+  return <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
+    <ListSubheader inset>Situations</ListSubheader>
+    {
+      situations && situations.map((situation, key) => {
+        return (
+          <ListItem button key={key} onClick={() => props.store.view.openSituationDetailPage(situation._id)}>
             <ListItemIcon>
-                <DashboardIcon />
+              <AssignmentIcon />
             </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-        </ListItem>
-        {
-            situations && situations.map((situation, key) => {
-                return <ListItem button key={key} onClick={()=> props.store.view.openSituationDetailPage(situation._id)}>
-                    <ListItemIcon>
-                        <AssignmentIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={situation.situation_name} />
-                </ListItem>
-            })
-        }
-    </div>
+            <ListItemText primary={situation.situation_name} />
+          </ListItem>
+        )
+      })
+    }
+  </div>
 };
 
-export const secondaryListItems = (props) => {
-  console.log("Props from list item",props)
+export const secondaryListItems = (props, callback) => {
+  console.log("Props from list item", props)
   return (
 
-  <div>
-    <ListSubheader inset>Actions</ListSubheader>
-    <ListItem button onClick={()=> props.store.view.openSituationManagePage()}>
-      <ListItemIcon>
-        <SettingsIcon />
-      </ListItemIcon>
-      <ListItemText primary="Manage Situations" />
-    </ListItem>
-    <ListItem button onClick={()=> props.store.view.openSituationAddPage()}>
-      <ListItemIcon>
-        <AddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Add Situations" />
-    </ListItem>
-    <ListItem button onClick={()=> props.store.view.openSimulationRunPage()}>
-      <ListItemIcon>
-        <DvrIcon />
-      </ListItemIcon>
-      <ListItemText primary="Run Simulation Flow" />
-    </ListItem>
-  </div>
-  )};
+    <div>
+      <ListSubheader inset>Actions</ListSubheader>
+      <ListItem button onClick={() => props.store.view.openSituationManagePage()}>
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Manage Situations" />
+      </ListItem>
+      <ListItem button onClick={() => callback('add', null)}>
+        <ListItemIcon>
+          <AddIcon />
+        </ListItemIcon>
+        <ListItemText primary="Add Situations" />
+      </ListItem>
+      <ListItem button onClick={() => props.store.view.openSimulationRunPage()}>
+        <ListItemIcon>
+          <DvrIcon />
+        </ListItemIcon>
+        <ListItemText primary="Run Simulation Flow" />
+      </ListItem>
+    </div>
+  )
+};

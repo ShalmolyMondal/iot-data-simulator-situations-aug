@@ -21,10 +21,17 @@ import Card from '@material-ui/core/Card';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Snackbar, { SnackbarContent } from "material-ui/Snackbar";
-
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import CardContent from '@material-ui/core/CardContent';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -135,7 +142,7 @@ const styles = (theme) => ({
   // main content
   button: {
     margin: theme.spacing.unit,
-    width: "100%"
+    // width: "100%"
   },
   btn: {
     width: "100%"
@@ -234,7 +241,7 @@ class CbtLayout extends React.Component {
   };
 
   handleDeleteDialogOpen = (situationId) => {
-    this.setState({ 
+    this.setState({
       dialogOpen: true,
       selectedSituationId: situationId,
     });
@@ -246,7 +253,7 @@ class CbtLayout extends React.Component {
 
   handleConfirmDeleteSituation = (id) => {
     this.props.store.view.deleteSituation(id);
-    this.setState({ 
+    this.setState({
       dialogOpen: false,
       selectedSituationId: null,
       message: "Deleted situation successfully",
@@ -256,30 +263,28 @@ class CbtLayout extends React.Component {
   }
 
   closeSnackBar = () => {
-    this.setState({ 
+    this.setState({
       message: null,
-      openSnackbar: false });
-  } 
+      openSnackbar: false
+    });
+  }
   render() {
     const { classes, situations, situation } = this.props;
 
     console.log("-----------Situations-----------", situations);
 
-
-    const ShowDetail = (id) => <div>Some Results</div>;
-
     return (
       <React.Fragment>
         <CssBaseline />
         <div className={classes.root}>
-          <AppBar
+          {/* <AppBar
             position="absolute"
             className={classNames(
               classes.appBar,
               this.state.open && classes.appBarShift
             )}
-          >
-            <Toolbar
+          > */}
+          {/* <Toolbar
               disableGutters={!this.state.open}
               className={classes.toolbar}
             >
@@ -293,8 +298,8 @@ class CbtLayout extends React.Component {
                 )}
               >
                 <MenuIcon />
-              </IconButton>
-              <Typography
+              </IconButton> */}
+          {/* <Typography
                 variant="title"
                 color="inherit"
                 noWrap
@@ -302,9 +307,9 @@ class CbtLayout extends React.Component {
               >
                 IOT PROJECT
               </Typography>
-              <IconButton color="inherit"></IconButton>
-            </Toolbar>
-          </AppBar>
+              <IconButton color="inherit"></IconButton> */}
+          {/* </Toolbar> */}
+          {/* </AppBar> */}
           <Drawer
             variant="permanent"
             classes={{
@@ -319,18 +324,27 @@ class CbtLayout extends React.Component {
               <strong className={classes.sidebarHeader}>
                 IoT Benchmark Tool
               </strong>
-              <IconButton onClick={this.handleDrawerClose}>
+              {/* <IconButton onClick={this.handleDrawerClose}>
                 <ChevronLeftIcon />
-              </IconButton>
+              </IconButton> */}
             </div>
             <Divider />
-            <List>{mainListItems(this.props, situations)}</List>
+            <List>
+              <ListItem button onClick={() => this.props.store.view.openSituationsPage()}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItem>
+            </List>
+            <Divider />
+            {situations && situations.length>0 && <List>{mainListItems(this.props, situations)}</List>}
             <Divider />
 
-            <List>{secondaryListItems(this.props)}</List>
+            <List>{secondaryListItems(this.props, this.openAddEditSituationModal)}</List>
           </Drawer>
           <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
+            {/* <div className={classes.appBarSpacer} /> */}
             <Card className={classes.card}>
 
               {/* {this.props.page} */}
@@ -365,25 +379,50 @@ class CbtLayout extends React.Component {
                   spacing={24}
                   alignItems="center"
                 >
-                  {situations && situations.map((situation, id) => {
-                    return (
-                      <Grid item xs={4} key={id}>
-                        <Card >
-                          <Button className={classes.btn} >
-                            <CardContent>
-                              <NotificationsIcon />
-                              <Typography variant="h4" component="div">
-                                {situation.situation_name}
-                              </Typography>
-                              <Typography variant="body2">
-                                {situation.situation_description}
-                              </Typography>
-                            </CardContent>
-                          </Button>
-                        </Card>
-                      </Grid>
-                    )
-                  })}
+
+                  {situations && situations.length>0 ?
+                    situations.map((situation, id) => {
+                      return (
+                        <Grid item xs={4} key={id}>
+                          <Card >
+                            <Button className={classes.btn} onClick={() => this.props.store.view.openSituationDetailPage(situation._id)} >
+                              <CardContent>
+                                <NotificationsIcon />
+                                <Typography variant="h4" component="div">
+                                  {situation.situation_name}
+                                </Typography>
+                                <Typography variant="body2">
+                                  {situation.situation_description}
+                                </Typography>
+                              </CardContent>
+                            </Button>
+                          </Card>
+                        </Grid>
+                      )
+                    }) :
+                    <Grid
+                      container
+                      spacing={0}
+                      direction="column"
+                      alignItems="center"
+                      justify="center"
+                    >
+                      <div className={classes.appBarSpacer} />
+                      <div className={classes.appBarSpacer} />
+                      <div className={classes.appBarSpacer} />
+                      <div className={classes.noContentText}>
+                        No situation to display
+                      </div>
+                      <Button
+                        color="primary"
+                        variant="contained"
+                        className={classes.button}
+                        onClick={() => this.openAddEditSituationModal('add', null)}
+                      >
+                        <AddIcon /> Add situaiton
+                      </Button>
+                    </Grid>
+                  }
 
                 </Grid>
               )}
@@ -437,7 +476,7 @@ class CbtLayout extends React.Component {
                             <Button onClick={() => this.props.store.view.openSituationDetailPage(situationData._id)} >View</Button>
                             <Button color={"primary"} onClick={() => this.openAddEditSituationModal('edit', situationData._id)} >Edit</Button>
                             <Button color={"secondary"} onClick={() => this.handleDeleteDialogOpen(situationData._id)} >Delete</Button>
-                            
+
                           </TableCell>
                         </TableRow>
                       ))}
@@ -717,26 +756,30 @@ class CbtLayout extends React.Component {
           </ConfirmationModal>
         }
         {
-          this.state.openSnackbar && 
+          this.state.openSnackbar &&
           <Snackbar
             anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left"
+              vertical: 'bottom',
+              horizontal: 'left',
             }}
             open={this.state.openSnackbar}
-            autoHideDuration={3000}
-            onRequestClose={() => this.closeSnackBar()}
-        >
-            <SnackbarContent
-                message={
-                    <span id="message-id">
-                        {this.state.message}
-                    </span>
-                }
-            >
-                {this.state.message}
-            </SnackbarContent>
-        </Snackbar>
+            autoHideDuration={6000}
+            onClose={this.closeSnackBar}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">{this.state.message}</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.closeSnackBar}
+              >
+                <CloseIcon />
+              </IconButton>,
+            ]}
+          />
         }
       </React.Fragment>
     );
