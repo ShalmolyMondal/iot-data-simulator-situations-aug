@@ -4,23 +4,16 @@ import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { mainListItems, secondaryListItems } from './listItems';
 import AddEditSituationModalWrapped from '../AddEditSituationModal/AddEditSituationModal';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import CardContent from '@material-ui/core/CardContent';
@@ -29,9 +22,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -41,15 +33,12 @@ import TableRow from '@material-ui/core/TableRow';
 
 
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import RunSituationSimulation from '../RunSituaitonSimulation/RunSituationSimulation';
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -272,44 +261,11 @@ class CbtLayout extends React.Component {
     const { classes, situations, situation } = this.props;
 
     console.log("-----------Situations-----------", situations);
-
+    const ShowDetail = (id) => <div>Some Results</div>;
     return (
       <React.Fragment>
         <CssBaseline />
         <div className={classes.root}>
-          {/* <AppBar
-            position="absolute"
-            className={classNames(
-              classes.appBar,
-              this.state.open && classes.appBarShift
-            )}
-          > */}
-          {/* <Toolbar
-              disableGutters={!this.state.open}
-              className={classes.toolbar}
-            >
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={classNames(
-                  classes.menuButton,
-                  this.state.open && classes.menuButtonHidden
-                )}
-              >
-                <MenuIcon />
-              </IconButton> */}
-          {/* <Typography
-                variant="title"
-                color="inherit"
-                noWrap
-                className={classes.title}
-              >
-                IOT PROJECT
-              </Typography>
-              <IconButton color="inherit"></IconButton> */}
-          {/* </Toolbar> */}
-          {/* </AppBar> */}
           <Drawer
             variant="permanent"
             classes={{
@@ -324,9 +280,6 @@ class CbtLayout extends React.Component {
               <strong className={classes.sidebarHeader}>
                 IoT Benchmark Tool
               </strong>
-              {/* <IconButton onClick={this.handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton> */}
             </div>
             <Divider />
             <List>
@@ -344,10 +297,9 @@ class CbtLayout extends React.Component {
             <List>{secondaryListItems(this.props, this.openAddEditSituationModal)}</List>
           </Drawer>
           <main className={classes.content}>
-            {/* <div className={classes.appBarSpacer} /> */}
+
             <Card className={classes.card}>
 
-              {/* {this.props.page} */}
               {this.props.page == 'add-situation' && (
                 <Grid
                   container
@@ -433,30 +385,6 @@ class CbtLayout extends React.Component {
                   spacing={24}
                   alignItems="center"
                 >
-                  {/* {situations && situations.map((situation, id) => {
-                    return (
-
-                      <Grid item xs={4} key={id}>
-
-                        <Card >
-                          <Button className={classes.btn} onClick={() => this.props.store.view.openSituationDetailPage(situation._id)}>
-                            <CardContent>
-                              <NotificationsIcon />
-                              <Typography variant="h4" component="div">
-                                {situation.situation_name}
-                              </Typography>
-                              <Typography variant="body2">
-                                {situation.situation_description}
-                              </Typography>
-                            </CardContent>
-                          </Button>
-                        </Card>
-
-                      </Grid>
-
-                    )
-                  })} */}
-
                   <Table className={classes.table}>
                     <TableHead>
                       <TableRow>
@@ -531,6 +459,7 @@ class CbtLayout extends React.Component {
               )}
               {this.props.page == 'run-simulation' && (
                 <React.Fragment>
+                  <RunSituationSimulation situationList={situations}/>
                   <div className="">
                     <h1>Run Simulation</h1>
                     <div className={classes.flexthis}>
