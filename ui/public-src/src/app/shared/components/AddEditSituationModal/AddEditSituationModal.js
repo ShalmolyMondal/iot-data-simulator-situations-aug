@@ -247,14 +247,17 @@ class AddEditSituationModal extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.open && this.props.mode == 'EDIT_MODE' &&
-    this.props.situationId) {
+    if (
+      this.props.open &&
+      this.props.mode == 'EDIT_MODE' &&
+      this.props.situationId
+    ) {
       this.populateFormData(this.props.situationId);
     }
   }
 
   handleClose = (message = '') => {
-    console.log(message)
+    console.log(message);
     this.setState({
       values: false,
       expanded: 1,
@@ -264,8 +267,6 @@ class AddEditSituationModal extends React.Component {
     });
     this.props.closeModal(message);
   };
-
-  
 
   handleChange = (name) => (event) => {
     this.setState({
@@ -386,8 +387,12 @@ class AddEditSituationModal extends React.Component {
       context_attributes: this.state.context_attributes,
     };
     if (this.props.mode == 'EDIT_MODE') {
-      this.props.viewStore.updateSituation(this.props.situationId, {situationData: situationPayload}, this.handleClose);
-      
+      this.props.viewStore.updateSituation(
+        this.props.situationId,
+        { situationData: situationPayload },
+        this.handleClose
+      );
+
       // API.patch('/situation/update/' + this.props.situationId, {
       //   situationData: {situationData: situationPayload},
       // }).then((res) => {
@@ -396,7 +401,10 @@ class AddEditSituationModal extends React.Component {
       //   this.handleClose("Situation Updated successfully");
       // });
     } else {
-      this.props.viewStore.createSituation({situationData: situationPayload}, this.handleClose);
+      this.props.viewStore.createSituation(
+        { situationData: situationPayload },
+        this.handleClose
+      );
       // API.post('/situation/create', {
       //   situationData: situationPayload,
       // }).then((res) => {
@@ -420,8 +428,8 @@ class AddEditSituationModal extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props)
-    
+    console.log(this.props);
+
     return (
       <div>
         <Dialog
@@ -816,7 +824,9 @@ class AddEditSituationModal extends React.Component {
               onClick={this.handleAddEditSituation}
               color="primary"
             >
-              {this.props.mode == 'EDIT_MODE' ? "Save Situation" : "Add Situation"}
+              {this.props.mode == 'EDIT_MODE'
+                ? 'Save Situation'
+                : 'Add Situation'}
             </Button>
           </DialogActions>
         </Dialog>
