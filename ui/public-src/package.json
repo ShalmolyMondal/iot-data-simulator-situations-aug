@@ -98,6 +98,7 @@
     "react-virtualized": "9.16.1",
     "sockjs-client": "1.1.4",
     "stompjs": "2.3.3",
-    "validatorjs": "3.13.5"
+    "validatorjs": "3.13.5",
+    "websocket": "1.0.34"
   }
 }
