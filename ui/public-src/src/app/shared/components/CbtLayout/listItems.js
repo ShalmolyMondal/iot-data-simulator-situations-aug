@@ -15,9 +15,6 @@ import ViewStore from '../../stores/ViewStore';
 // import FAKE_DATA from '../../constants/fakeData';
 
 export const mainListItems = (props, situations) => {
-  console.log("===mainListItems===", situations)
-  console.log("===mainListItems===props========", props.store)
-
 
   return <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
     <ListSubheader inset>Situations</ListSubheader>

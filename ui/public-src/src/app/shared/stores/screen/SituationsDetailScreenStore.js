@@ -10,7 +10,7 @@ export default class SituationsDetailScreenStore {
     }
 
     load(id) {
-        this.appStore.situationsStore.getAll();
+        this.appStore.SituationManageStore.getAll();
         this.appStore.SituationDetailStore.getById(id);
     }
 

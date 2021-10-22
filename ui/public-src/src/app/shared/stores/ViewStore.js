@@ -66,7 +66,7 @@ export default class ViewStore {
     openSituationsPage = () => {
         this.page = "situations";
         this.currentTab = 4;
-        this.appStore.situationsScreenStore.load();
+        this.appStore.situationsManageScreenStore.load();
     };
 
     openSituationAddPage = () => {
@@ -84,7 +84,7 @@ export default class ViewStore {
     createSituation = (params, callback) => {
         this.appStore.situationsDetailScreenStore.create(params, callback);
         console.log(callback);
-        this.appStore.situationsScreenStore.load();
+        this.appStore.situationsManageScreenStore.load();
     };
 
     updateSituation = (id, params, callback) => {

@@ -17,7 +17,7 @@ export default class SituationStore {
         console.log('...loading situation');
         return API.get('/situation/all')
             .then(({ data = [] }) => {
-                console.log('devices loaded: ', data);
+    
                 this.items = data;
             });
     }

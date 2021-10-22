@@ -33,7 +33,7 @@ export default class SituationDetailScreen extends Component {
             <MuiThemeProvider theme={theme}>
             <CbtLayout
                 page={this.props.store.view.page}
-                situations={this.props.store.situationsStore.items}
+                situations={this.props.store.SituationManageStore.items}
                 situation={this.props.store.SituationDetailStore.item}
                 {...this.props}
             />
