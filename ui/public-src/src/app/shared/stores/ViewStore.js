@@ -23,6 +23,16 @@ export default class ViewStore {
                 return "/devices";
             case "systems":
                 return "/systems";
+            case "situations":
+                return "/situations";
+            case "add-situation":
+                return "/add-situation";
+            case "situation-detail":
+                return "/situation-detail";
+            case "manage-situation":
+                return "/manage-situation";
+            case "run-simulation":
+                return "/run-simulation";
             default:
                 return "/404";
         }
@@ -52,6 +62,53 @@ export default class ViewStore {
         this.currentTab = 3;
         this.appStore.systemsScreenStore.load();
     };
+
+    openSituationsPage = () => {
+        this.page = "situations";
+        this.currentTab = 4;
+        this.appStore.situationsManageScreenStore.load();
+    };
+
+    openSituationAddPage = () => {
+        this.page = "add-situation";
+        // this.currentTab = 5;
+        this.appStore.situationsAddScreenStore.load();
+    };
+
+    openSituationDetailPage = (id) => {
+        this.page = "situation-detail";
+        // this.currentTab = 6;
+        this.appStore.situationsDetailScreenStore.load(id);
+    };
+
+    createSituation = (params, callback) => {
+        this.appStore.situationsDetailScreenStore.create(params, callback);
+        console.log(callback);
+        this.appStore.situationsManageScreenStore.load();
+    };
+
+    updateSituation = (id, params, callback) => {
+        this.appStore.situationsDetailScreenStore.update(id, params, callback);
+        console.log(callback);
+    };
+
+    deleteSituation = (id) => {
+        this.appStore.situationsDetailScreenStore.delete(id);
+    };
+
+    openSituationManagePage = () => {
+        this.page = "manage-situation";
+        // this.currentTab = 7;
+        this.appStore.situationsManageScreenStore.load();
+    };
+
+    openSimulationRunPage = () => {
+        this.page = "run-simulation";
+        // this.currentTab = 7;
+        this.appStore.simulationRunScreenStore.load();
+    };
+
+
 
     // Modals
     openCreateDefinition = () => {

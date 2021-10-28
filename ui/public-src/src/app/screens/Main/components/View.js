@@ -11,6 +11,14 @@ import SessionsScreen from '../../Sessions';
 import DefinitionsScreen from '../../Definitions';
 import DevicesScreen from '../../Devices';
 import SystemsScreen from '../../Systems';
+import SituationsScreen from '../../Situations';
+import SituationAddScreen from '../../Situations/SituationAddScreen';
+import SituationDetailScreen from '../../Situations/SituationDetailScreen';
+import SituationManageScreen from '../../Situations/SituationManageScreen';
+import SimulationRunScreen from '../../Situations/SimulationRunScreen';
+
+
+
 
 const StyledView = glamorous.div({
     display: 'flex',
@@ -19,8 +27,7 @@ const StyledView = glamorous.div({
     width: '100%',
     padding: '0',
     alignItems: 'baseline',
-    backgroundColor: '#d9d9d9'
-});
+    backgroundColor: "#fff"});
 
 @inject("store") @observer
 export default class View extends Component {
@@ -40,6 +47,16 @@ export default class View extends Component {
                 return <DevicesScreen />
             case 'systems': 
                 return <SystemsScreen />
+            case 'situations': 
+                return <SituationsScreen />
+            case 'add-situation': 
+                return <SituationAddScreen />
+            case 'situation-detail': 
+                return <SituationDetailScreen />
+            case 'manage-situation': 
+                return <SituationManageScreen />
+            case 'run-simulation': 
+                return <SimulationRunScreen />
             default:
                 return <SessionsScreen />
         }
