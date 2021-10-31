@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 
@@ -27,21 +26,31 @@ class ConfirmationModal extends React.Component {
     return (
       <div>
         <Dialog
-            open={this.props.dialogOpen}
-            onClose={this.props.handleDialogClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+          open={this.props.dialogOpen}
+          onClose={this.props.handleDialogClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">{this.props.modalTitle}</DialogTitle>
-            <DialogContent>{"Are you sure want to delete?"}</DialogContent>
-            <DialogActions>
+          <DialogTitle id="alert-dialog-title">
+            {this.props.modalTitle}
+          </DialogTitle>
+          <DialogContent>{'Are you sure want to delete?'}</DialogContent>
+          <DialogActions>
             <Button onClick={this.props.handleDialogClose} color="primary">
-                No
+              No
             </Button>
-            <Button onClick={() => this.props.handleConfirmDeleteSituation(this.props.selectedSituationId)} color="primary" autoFocus>
-                Yes
+            <Button
+              onClick={() =>
+                this.props.handleConfirmDeleteSituation(
+                  this.props.selectedSituationId
+                )
+              }
+              color="primary"
+              autoFocus
+            >
+              Yes
             </Button>
-            </DialogActions>
+          </DialogActions>
         </Dialog>
       </div>
     );

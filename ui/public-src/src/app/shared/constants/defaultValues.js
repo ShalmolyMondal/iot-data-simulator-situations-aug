@@ -16,7 +16,16 @@ const CONTEXT_ATTRIBUTE = {
   data_values: [{ ...DATA_VALUE }],
 };
 
+const TRANSITION_DATA = {
+  from: '',
+  to: '',
+  timeBased: true,
+  rule: null,
+  time: '',
+};
+
 export const DEFAULT_VALUES = {
   CONTEXT_ATTRIBUTE: CONTEXT_ATTRIBUTE,
   DATA_VALUE: DATA_VALUE,
+  TRANSITION_DATA: TRANSITION_DATA,
 };
