@@ -242,6 +242,7 @@ class AddEditSituationModal extends React.Component {
       expanded: 1,
       situation_name: '',
       situation_description: '',
+      weightError: [],
       context_attributes: [{ ...DEFAULT_VALUES.CONTEXT_ATTRIBUTE }],
     };
   }
@@ -276,8 +277,14 @@ class AddEditSituationModal extends React.Component {
 
   handleContextAttributeChange = (name, index) => (event) => {
     const newCA = _.cloneDeep(this.state.context_attributes);
+    const whtError = _.cloneDeep(this.state.weightError);
     newCA[index][name] = event.target.value;
+    console.log(event.target.value);
+    if (name == 'weight' && event.target.value > 1) {
+      whtError[index] = 'Weight cannot be more than 1';
+    }
     this.setState({
+      weightError: whtError,
       context_attributes: newCA,
     });
   };
@@ -582,6 +589,23 @@ class AddEditSituationModal extends React.Component {
                                       index
                                     )}
                                     margin="normal"
+                                    InputProps={{
+                                      inputProps: { min: 0, max: 1 },
+                                    }}
+                                    error={
+                                      this.state.weightError &&
+                                      this.state.weightError.length > 0 &&
+                                      this.state.weightError[index]
+                                        ? true
+                                        : false
+                                    }
+                                    helperText={
+                                      this.state.weightError &&
+                                      this.state.weightError.length > 0 &&
+                                      this.state.weightError[index]
+                                        ? this.state.weightError[index]
+                                        : ''
+                                    }
                                   />
                                 </Grid>
                               </Grid>

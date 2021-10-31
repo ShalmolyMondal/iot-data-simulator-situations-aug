@@ -31,7 +31,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -39,11 +38,52 @@ import Avatar from '@material-ui/core/Avatar';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import RunSituationSimulation from '../RunSituaitonSimulation/RunSituationSimulation';
+import ConfigureSimulation from '../ConfigureSimulation/ConfigureSimulation';
+import Console from '../../../screens/Sessions/components/Console';
+import SplitPane from 'react-split-pane';
+import { observable, toJS } from 'mobx';
+import { observer, inject } from 'mobx-react';
+
 const drawerWidth = 240;
 
 const styles = (theme) => ({
   root: {
     display: 'flex',
+  },
+  splitpane: {
+    '& .Resizer': {
+      background: '#fff',
+      opacity: '.2',
+      zIndex: '1',
+      MozBoxSizing: 'border-box',
+      WebkitBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      MozBackgroundClip: 'padding',
+      WebkitBackgroundClip: 'padding',
+      backgroundClip: 'padding-box',
+    },
+    '& .Resizer:hover': {
+      WebkitTransition: 'all 2s ease',
+      transition: 'all 2s ease',
+    },
+    '& .Resizer.horizontal': {
+      height: '11px',
+      margin: '-5px 0',
+      borderTop: '5px solid rgba(255, 255, 255, 0)',
+      borderBottom: '5px solid rgba(255, 255, 255, 0)',
+      cursor: 'row-resize',
+      width: '100%',
+    },
+    '& .Resizer.horizontal:hover': {
+      borderTop: '5px solid rgba(255, 255, 255, 0.5)',
+      borderBottom: '5px solid rgba(0, 0, 0, 0.5)',
+    },
+    '& .Resizer.disabled': {
+      cursor: 'not-allowed',
+    },
+    '& .Resizer.disabled:hover': {
+      borderColor: 'transparent',
+    },
   },
   grid: {
     flexGrow: 1,
@@ -93,6 +133,9 @@ const styles = (theme) => ({
   title: {
     flexGrow: 1,
   },
+  cardTitle: {
+    fontSize: '36px',
+  },
   drawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -134,7 +177,7 @@ const styles = (theme) => ({
     // width: "100%"
   },
   btn: {
-    width: "100%"
+    width: '100%',
   },
   input: {
     display: 'none',
@@ -146,7 +189,7 @@ const styles = (theme) => ({
   card: {
     minWidth: 275,
     minHeight: 'calc(100vh - 120px)',
-    padding: "inherit"
+    padding: 'inherit',
   },
   simulationCard: {
     maxWidth: 400,
@@ -154,6 +197,10 @@ const styles = (theme) => ({
   flexthis: {
     display: 'flex',
     justifyContent: 'space-around',
+  },
+  spaceBetween: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   media: {
     height: 0,
@@ -175,9 +222,42 @@ const styles = (theme) => ({
   avatar: {
     backgroundColor: '#f1f1f1',
   },
-
+  list: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    minHeight: '0',
+    overflow: 'auto',
+    position: 'relative',
+    background: '#d9d9d9',
+  },
+  consoleWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 9999999999,
+    background: 'rgb(0, 0, 0)',
+    padding: '0px',
+    margin: '0px',
+    opacity: '0.8',
+    fontFamily: 'monospace',
+    fontSize: '16px',
+    overflow: 'auto',
+    width: '100%',
+    maxHeight: '100%',
+    color: 'white',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '1 1 0%',
+  },
+  consoleExpanded: {
+    height: '200px',
+  },
 });
 
+@inject('store')
+@observer
 class CbtLayout extends React.Component {
   constructor(props) {
     super(props);
@@ -195,6 +275,8 @@ class CbtLayout extends React.Component {
     message: '',
     openSnackbar: false,
     expanded: false,
+    openRunSimulationModal: false,
+    transitions: null,
   };
 
   handleExpandClick = () => {
@@ -206,6 +288,13 @@ class CbtLayout extends React.Component {
       message: message,
       openSnackbar: message ? true : false,
       selectedSituationId: null,
+    });
+  };
+
+  openSnackBarWithMessage = (message) => {
+    this.setState({
+      message: message,
+      openSnackbar: message ? true : false,
     });
   };
 
@@ -245,22 +334,34 @@ class CbtLayout extends React.Component {
     this.setState({
       dialogOpen: false,
       selectedSituationId: null,
-      message: "Deleted situation successfully",
-      openSnackbar: true
+      message: 'Deleted situation successfully',
+      openSnackbar: true,
     });
     this.props.store.view.openSituationManagePage();
-  }
+  };
+
+  openConfigureSimulationModal = () => {
+    this.setState({ openRunSimulationModal: true });
+  };
+
+  closeRunsituationModal = () => {
+    this.setState({ openRunSimulationModal: false });
+  };
+
+  handleConfigurationSaved = (transitions) => {
+    this.setState({ transitions: transitions });
+  };
 
   closeSnackBar = () => {
     this.setState({
       message: null,
-      openSnackbar: false
+      openSnackbar: false,
     });
-  }
+  };
   render() {
     const { classes, situations, situation } = this.props;
-
-    console.log("-----------Situations-----------", situations);
+    let { sessionsScreenStore } = this.props.store;
+    console.log('-----------Situations-----------', situations);
 
     return (
       <React.Fragment>
@@ -283,7 +384,10 @@ class CbtLayout extends React.Component {
             </div>
             <Divider />
             <List>
-              <ListItem button onClick={() => this.props.store.view.openSituationsPage()}>
+              <ListItem
+                button
+                onClick={() => this.props.store.view.openSituationsPage()}
+              >
                 <ListItemIcon>
                   <DashboardIcon />
                 </ListItemIcon>
@@ -291,15 +395,17 @@ class CbtLayout extends React.Component {
               </ListItem>
             </List>
             <Divider />
-            {situations && situations.length > 0 && <List>{mainListItems(this.props, situations)}</List>}
+            {situations && situations.length > 0 && (
+              <List>{mainListItems(this.props, situations)}</List>
+            )}
             <Divider />
 
-            <List>{secondaryListItems(this.props, this.openAddEditSituationModal)}</List>
+            <List>
+              {secondaryListItems(this.props, this.openAddEditSituationModal)}
+            </List>
           </Drawer>
           <main className={classes.content}>
-
             <Card className={classes.card}>
-
               {this.props.page == 'add-situation' && (
                 <Grid
                   container
@@ -326,18 +432,20 @@ class CbtLayout extends React.Component {
               )}
 
               {this.props.page == 'situations' && (
-                <Grid
-                  container
-                  spacing={24}
-                  alignItems="center"
-                >
-
-                  {situations && situations.length > 0 ?
+                <Grid container spacing={24} alignItems="center">
+                  {situations && situations.length > 0 ? (
                     situations.map((situation, id) => {
                       return (
                         <Grid item xs={4} key={id}>
-                          <Card >
-                            <Button className={classes.btn} onClick={() => this.props.store.view.openSituationDetailPage(situation._id)} >
+                          <Card>
+                            <Button
+                              className={classes.btn}
+                              onClick={() =>
+                                this.props.store.view.openSituationDetailPage(
+                                  situation._id
+                                )
+                              }
+                            >
                               <CardContent>
                                 <NotificationsIcon />
                                 <Typography variant="h4" component="div">
@@ -350,8 +458,9 @@ class CbtLayout extends React.Component {
                             </Button>
                           </Card>
                         </Grid>
-                      )
-                    }) :
+                      );
+                    })
+                  ) : (
                     <Grid
                       container
                       spacing={0}
@@ -369,45 +478,71 @@ class CbtLayout extends React.Component {
                         color="primary"
                         variant="contained"
                         className={classes.button}
-                        onClick={() => this.openAddEditSituationModal('add', null)}
+                        onClick={() =>
+                          this.openAddEditSituationModal('add', null)
+                        }
                       >
                         <AddIcon /> Add situaiton
                       </Button>
                     </Grid>
-                  }
-
+                  )}
                 </Grid>
               )}
 
               {this.props.page == 'manage-situation' && (
-                <Grid
-                  container
-                  spacing={24}
-                  alignItems="center"
-                >
+                <Grid container spacing={24} alignItems="center">
                   <Table className={classes.table}>
                     <TableHead>
                       <TableRow>
                         <TableCell>Situation Name</TableCell>
-                        <TableCell align="right">Situation Description</TableCell>
+                        <TableCell align="right">
+                          Situation Description
+                        </TableCell>
                         <TableCell align="right">Actions</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {situations && situations.map((situationData, id) => (
-                        <TableRow key={id}>
-                          <TableCell component="th" scope="row">
-                            {situationData.situation_name}
-                          </TableCell>
-                          <TableCell align="right">{situationData.situation_description}</TableCell>
-                          <TableCell align="right">
-                            <Button onClick={() => this.props.store.view.openSituationDetailPage(situationData._id)} >View</Button>
-                            <Button color={"primary"} onClick={() => this.openAddEditSituationModal('edit', situationData._id)} >Edit</Button>
-                            <Button color={"secondary"} onClick={() => this.handleDeleteDialogOpen(situationData._id)} >Delete</Button>
-
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {situations &&
+                        situations.map((situationData, id) => (
+                          <TableRow key={id}>
+                            <TableCell component="th" scope="row">
+                              {situationData.situation_name}
+                            </TableCell>
+                            <TableCell align="right">
+                              {situationData.situation_description}
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                onClick={() =>
+                                  this.props.store.view.openSituationDetailPage(
+                                    situationData._id
+                                  )
+                                }
+                              >
+                                View
+                              </Button>
+                              <Button
+                                color={'primary'}
+                                onClick={() =>
+                                  this.openAddEditSituationModal(
+                                    'edit',
+                                    situationData._id
+                                  )
+                                }
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                color={'secondary'}
+                                onClick={() =>
+                                  this.handleDeleteDialogOpen(situationData._id)
+                                }
+                              >
+                                Delete
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </Grid>
@@ -441,7 +576,9 @@ class CbtLayout extends React.Component {
                           <Button
                             variant="contained"
                             color="secondary"
-                            onClick={() => this.handleDeleteDialogOpen(situation._id)}
+                            onClick={() =>
+                              this.handleDeleteDialogOpen(situation._id)
+                            }
                           >
                             Delete
                           </Button>
@@ -461,101 +598,214 @@ class CbtLayout extends React.Component {
                             </Grid>
                             <Divider />
 
-                            <Grid container className={classes.grid} >
-                              {situation.context_attributes && situation.context_attributes.map((attribute, id) => (
-                                <React.Fragment key={id}>
-                                  <Grid item xs={4} className={classes.grid}>
-                                    <Typography >
-                                      Name
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={8} className={classes.grid}>
-                                    <Typography >
-                                      {attribute.context_attribute_name}
-                                    </Typography>
-                                  </Grid>
-                                  <Grid item xs={4} className={classes.grid}>
-                                    <Typography>Description</Typography>
-                                  </Grid>
-                                  <Grid item xs={8} className={classes.grid}>
-                                    <Typography>{attribute.context_attribute_description}</Typography>
-                                  </Grid>
-                                  <Grid item xs={4} className={classes.grid}>
-                                    <Typography>Weight</Typography>
-                                  </Grid>
-                                  <Grid item xs={8} className={classes.grid}>
-                                    <Typography>
-                                      {attribute.weight}
-                                    </Typography>
-                                  </Grid>
-                                  {attribute.data_values && attribute.data_values.map((data_value, data_valueID) => (
-                                    <React.Fragment key={data_valueID} >
-                                      <Grid item xs={4} className={classes.grid}>
-                                        <Typography>Contribution</Typography>
+                            <Grid container className={classes.grid}>
+                              {situation.context_attributes &&
+                                situation.context_attributes.map(
+                                  (attribute, id) => (
+                                    <React.Fragment key={id}>
+                                      <Grid
+                                        item
+                                        xs={4}
+                                        className={classes.grid}
+                                      >
+                                        <Typography>Name</Typography>
                                       </Grid>
-                                      <Grid item xs={8} className={classes.grid}>
+                                      <Grid
+                                        item
+                                        xs={8}
+                                        className={classes.grid}
+                                      >
                                         <Typography>
-                                          {data_value.contribution}
+                                          {attribute.context_attribute_name}
                                         </Typography>
                                       </Grid>
-                                      <Grid item xs={4} className={classes.grid}>
-                                        <Typography>Range Type</Typography>
+                                      <Grid
+                                        item
+                                        xs={4}
+                                        className={classes.grid}
+                                      >
+                                        <Typography>Description</Typography>
                                       </Grid>
-                                      <Grid item xs={8} className={classes.grid}>
+                                      <Grid
+                                        item
+                                        xs={8}
+                                        className={classes.grid}
+                                      >
                                         <Typography>
-                                          {data_value.range_type}
+                                          {
+                                            attribute.context_attribute_description
+                                          }
                                         </Typography>
                                       </Grid>
-                                      {data_value.range_values && (<React.Fragment>
-                                        <Grid item xs={12} className={classes.grid}>
-                                          <Typography><strong>Range Values</strong></Typography>
-                                        </Grid>
-
-                                        {data_value.range_values && (
-                                          <React.Fragment>
-                                            <Grid item xs={4} className={classes.grid}>
-                                              <Typography>Lower Bound</Typography>
-                                            </Grid>
-                                            <Grid item xs={8} className={classes.grid}>
-                                              <Typography>
-                                                {data_value.range_values.lower_bound}
-                                              </Typography>
-                                            </Grid>
-                                            <Grid item xs={4} className={classes.grid}>
-                                              <Typography>Higher Bound</Typography>
-                                            </Grid>
-                                            <Grid item xs={8} className={classes.grid}>
-                                              <Typography>
-                                                {data_value.range_values.higher_bound}
-                                              </Typography>
-                                            </Grid>
-                                            {data_value.range_values.multiple_values && data_value.range_values.multiple_values.length>0 && (
-                                              <React.Fragment>
-                                                <Grid item xs={4} className={classes.grid}>
-                                                  <Typography>Multiple Values</Typography>
-                                                </Grid>
-                                                <Grid item xs={8} className={classes.grid}>
-                                                  {data_value.range_values.multiple_values && data_value.range_values.multiple_values.map((value, valueId) => (
-
+                                      <Grid
+                                        item
+                                        xs={4}
+                                        className={classes.grid}
+                                      >
+                                        <Typography>Weight</Typography>
+                                      </Grid>
+                                      <Grid
+                                        item
+                                        xs={8}
+                                        className={classes.grid}
+                                      >
+                                        <Typography>
+                                          {attribute.weight}
+                                        </Typography>
+                                      </Grid>
+                                      {attribute.data_values &&
+                                        attribute.data_values.map(
+                                          (data_value, data_valueID) => (
+                                            <React.Fragment key={data_valueID}>
+                                              <Grid
+                                                item
+                                                xs={4}
+                                                className={classes.grid}
+                                              >
+                                                <Typography>
+                                                  Contribution
+                                                </Typography>
+                                              </Grid>
+                                              <Grid
+                                                item
+                                                xs={8}
+                                                className={classes.grid}
+                                              >
+                                                <Typography>
+                                                  {data_value.contribution}
+                                                </Typography>
+                                              </Grid>
+                                              <Grid
+                                                item
+                                                xs={4}
+                                                className={classes.grid}
+                                              >
+                                                <Typography>
+                                                  Range Type
+                                                </Typography>
+                                              </Grid>
+                                              <Grid
+                                                item
+                                                xs={8}
+                                                className={classes.grid}
+                                              >
+                                                <Typography>
+                                                  {data_value.range_type}
+                                                </Typography>
+                                              </Grid>
+                                              {data_value.range_values && (
+                                                <React.Fragment>
+                                                  <Grid
+                                                    item
+                                                    xs={12}
+                                                    className={classes.grid}
+                                                  >
                                                     <Typography>
-                                                      {value}
+                                                      <strong>
+                                                        Range Values
+                                                      </strong>
                                                     </Typography>
+                                                  </Grid>
 
-                                                  ))}
-                                                </Grid>
-                                              </React.Fragment>
-                                            )}
-                                          </React.Fragment>
+                                                  {data_value.range_values && (
+                                                    <React.Fragment>
+                                                      <Grid
+                                                        item
+                                                        xs={4}
+                                                        className={classes.grid}
+                                                      >
+                                                        <Typography>
+                                                          Lower Bound
+                                                        </Typography>
+                                                      </Grid>
+                                                      <Grid
+                                                        item
+                                                        xs={8}
+                                                        className={classes.grid}
+                                                      >
+                                                        <Typography>
+                                                          {
+                                                            data_value
+                                                              .range_values
+                                                              .lower_bound
+                                                          }
+                                                        </Typography>
+                                                      </Grid>
+                                                      <Grid
+                                                        item
+                                                        xs={4}
+                                                        className={classes.grid}
+                                                      >
+                                                        <Typography>
+                                                          Higher Bound
+                                                        </Typography>
+                                                      </Grid>
+                                                      <Grid
+                                                        item
+                                                        xs={8}
+                                                        className={classes.grid}
+                                                      >
+                                                        <Typography>
+                                                          {
+                                                            data_value
+                                                              .range_values
+                                                              .higher_bound
+                                                          }
+                                                        </Typography>
+                                                      </Grid>
+                                                      {data_value.range_values
+                                                        .multiple_values &&
+                                                        data_value.range_values
+                                                          .multiple_values
+                                                          .length > 0 && (
+                                                          <React.Fragment>
+                                                            <Grid
+                                                              item
+                                                              xs={4}
+                                                              className={
+                                                                classes.grid
+                                                              }
+                                                            >
+                                                              <Typography>
+                                                                Multiple Values
+                                                              </Typography>
+                                                            </Grid>
+                                                            <Grid
+                                                              item
+                                                              xs={8}
+                                                              className={
+                                                                classes.grid
+                                                              }
+                                                            >
+                                                              {data_value
+                                                                .range_values
+                                                                .multiple_values &&
+                                                                data_value.range_values.multiple_values.map(
+                                                                  (
+                                                                    value,
+                                                                    valueId
+                                                                  ) => (
+                                                                    <Typography>
+                                                                      {value}
+                                                                    </Typography>
+                                                                  )
+                                                                )}
+                                                            </Grid>
+                                                          </React.Fragment>
+                                                        )}
+                                                    </React.Fragment>
+                                                  )}
+                                                </React.Fragment>
+                                              )}
+                                            </React.Fragment>
+                                          )
                                         )}
-                                      </React.Fragment>)}
                                     </React.Fragment>
-                                  ))}
-                                </React.Fragment>
-                              ))}
+                                  )
+                                )}
                             </Grid>
                           </Card>
                         </Grid>
-
                       </Grid>
                     </div>
                   )}
@@ -563,16 +813,56 @@ class CbtLayout extends React.Component {
               )}
               {this.props.page == 'run-simulation' && (
                 <React.Fragment>
-                  <RunSituationSimulation situationList={situations} />
+                  <div className={classes.spaceBetween}>
+                    <div className={classes.cardTitle}>Situation flow</div>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => this.openConfigureSimulationModal()}
+                    >
+                      Configure simulation
+                    </Button>
+                  </div>
+                  <RunSituationSimulation
+                    situationList={situations}
+                    transitions={this.state.transitions}
+                  />
                 </React.Fragment>
               )}
             </Card>
+            <div className={classes.consoleWrapper}>
+              <div
+                className={
+                  this.props.store.sessionsScreenStore.consoleExpanded
+                    ? classes.consoleExpanded
+                    : ''
+                }
+              >
+                <Console expanded={sessionsScreenStore.consoleExpanded} />
+              </div>
+            </div>
           </main>
+          {/* <div className={classes.list} id="test">
+            <SplitPane
+              className={classes.splitpane}
+              split="horizontal"
+              primary="second"
+              defaultSize={sessionsScreenStore.consoleSize}
+              size={sessionsScreenStore.consoleSize}
+              pane1Style={{ overflow: 'auto' }}
+              onChange={(size) => sessionsScreenStore.setConsoleSize(size)}
+              maxSize={-15}
+            >
+              <SessionsList /> 
+              
+            </SplitPane>
+          </div> */}
         </div>
-        {
-          this.state.openModal &&
+        {this.state.openModal && (
           <AddEditSituationModalWrapped
-            key={Date.now().toString(36) + Math.random().toString(36).substring(2)}
+            key={
+              Date.now().toString(36) + Math.random().toString(36).substring(2)
+            }
             modalTitle={
               this.state.addEditSituationModalMode == 'ADD_MODE'
                 ? 'Add Situation'
@@ -583,22 +873,28 @@ class CbtLayout extends React.Component {
             open={this.state.openModal}
             closeModal={this.closeAddEditSituationModal}
             viewStore={this.props.store.view}
+            openSnackBarWithMessage={this.openSnackBarWithMessage}
           ></AddEditSituationModalWrapped>
-        }
-        {
-          this.state.dialogOpen &&
+        )}
+        {this.state.dialogOpen && (
           <ConfirmationModal
             dialogOpen={this.state.dialogOpen}
             handleDialogClose={this.handleDialogClose}
-            modalTitle={"Delete Situation"}
-            handleDialogClose={this.handleDialogClose}
+            modalTitle={'Delete Situation'}
             handleConfirmDeleteSituation={this.handleConfirmDeleteSituation}
             selectedSituationId={this.state.selectedSituationId}
-          >
-          </ConfirmationModal>
-        }
-        {
-          this.state.openSnackbar &&
+          ></ConfirmationModal>
+        )}
+        {this.state.openRunSimulationModal && (
+          <ConfigureSimulation
+            dialogOpen={this.state.openRunSimulationModal}
+            handleDialogClose={this.closeRunsituationModal}
+            modalTitle={'Configure Simulation'}
+            situationList={situations}
+            handleConfigurationSaved={this.handleConfigurationSaved}
+          ></ConfigureSimulation>
+        )}
+        {this.state.openSnackbar && (
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
@@ -622,7 +918,7 @@ class CbtLayout extends React.Component {
               </IconButton>,
             ]}
           />
-        }
+        )}
       </React.Fragment>
     );
   }
