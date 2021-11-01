@@ -255,6 +255,7 @@ class LogsList extends Component {
   }
 
   render() {
+    console.log(this.props.logs, 'logs here');
     return (
       <div style={logsContainerStyles}>
         {this.props.logs.map((log, idx) => {

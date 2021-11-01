@@ -1,12 +1,10 @@
 export default {
+  /** **/
+  websocketUrl: 'http://services:8080/ws',
 
-    /** **/
-    websocketUrl: 'http://services:8080/ws',
+  /** **/
+  isStompTracingEnabled: false,
 
-    /** **/
-    isStompTracingEnabled: false,
-
-    /** **/
-    reconnectionInterval: 3000,
-
-}
+  /** **/
+  reconnectionInterval: 3000,
+};

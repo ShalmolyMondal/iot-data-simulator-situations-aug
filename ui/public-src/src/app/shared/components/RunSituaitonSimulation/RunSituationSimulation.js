@@ -12,7 +12,12 @@ export default function RunSituationSimulation(props) {
   const [connectors, setConnectors] = useState([]);
   const [running, setRunning] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const closeConfigurationPanel = () => {
+  const closeConfigurationPanel = (saved) => {
+    console.log(saved);
+    if (saved) {
+      setRunning(false);
+      setCompleted(false);
+    }
     setOpenConfigurationPanel(false);
   };
 
@@ -44,34 +49,56 @@ export default function RunSituationSimulation(props) {
       border: getBorderStyle(status),
       padding: 10,
     };
+
     setElements(newElementlist);
   };
 
-  const runSimulation = () => {
-    console.log('Running Simulation...');
-    console.log('Loading transitions configuraiton...');
+  const writeIntoConsole = (message, id, name) => {
+    props.store.sessionsStore.addLogs({
+      message: message,
+      situationId: id,
+      situationName: name,
+      timestamp: new Date(),
+      type: 'session_payload',
+    });
+  };
 
+  const runSimulation = () => {
+    writeIntoConsole('Running Simulation...', 1, '');
+    writeIntoConsole('Loading transitions configuraiton....', 1, '');
     props.transitions.map((transition, index) => {
       const timer = setTimeout(
         () => {
-          console.log(
-            'Running situation: ' + getSituaitonName(transition.from) + '.'
+          writeIntoConsole(
+            'Running situation: ' + getSituaitonName(transition.from),
+            transition.from,
+            getSituaitonName(transition.from)
           );
           modifyElement(transition.from, 'active');
-          console.log('Time based:' + transition.time + ' seconds.');
+          writeIntoConsole(
+            'Time based:' + transition.time + ' seconds.',
+            transition.from,
+            getSituaitonName(transition.from)
+          );
         },
         1500,
         () => clearTimeout(timer)
       );
       const timeInterval = setTimeout(
         () => {
-          console.log(
-            'Running situation:' + getSituaitonName(transition.to) + '.'
+          writeIntoConsole(
+            'Transition to situation:' + getSituaitonName(transition.to),
+            transition.to,
+            getSituaitonName(transition.to)
           );
           modifyElement(transition.from, 'completed');
           const timer = setTimeout(
             () => {
-              'setting to active';
+              writeIntoConsole(
+                'Situation Completed:' + getSituaitonName(transition.to),
+                transition.to,
+                getSituaitonName(transition.to)
+              );
               modifyElement(transition.to, 'completed');
               if (props.transitions.length == index + 1) {
                 setRunning(false);

@@ -179,6 +179,12 @@ const styles = (theme) => ({
   btn: {
     width: '100%',
   },
+  dashboardCardText: {
+    maxWidth: '250px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   input: {
     display: 'none',
   },
@@ -448,10 +454,17 @@ class CbtLayout extends React.Component {
                             >
                               <CardContent>
                                 <NotificationsIcon />
-                                <Typography variant="h4" component="div">
+                                <Typography
+                                  variant="h4"
+                                  component="div"
+                                  className={classes.dashboardCardText}
+                                >
                                   {situation.situation_name}
                                 </Typography>
-                                <Typography variant="body2">
+                                <Typography
+                                  variant="body2"
+                                  className={classes.dashboardCardText}
+                                >
                                   {situation.situation_description}
                                 </Typography>
                               </CardContent>
@@ -826,6 +839,7 @@ class CbtLayout extends React.Component {
                   <RunSituationSimulation
                     situationList={situations}
                     transitions={this.state.transitions}
+                    store={this.props.store}
                   />
                 </React.Fragment>
               )}
