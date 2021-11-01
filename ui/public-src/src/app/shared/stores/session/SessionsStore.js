@@ -18,7 +18,7 @@ export default class SessionsStore {
 
   @observable.shallow items = [];
 
-  @observable.shallow logs = ['asd'];
+  @observable.shallow logs = [];
   @observable.shallow logsBuffer = [];
 
   @observable nameFilter = '';
@@ -85,6 +85,16 @@ export default class SessionsStore {
       bufferSize
     );
   }
+
+  addLogs = (data) => {
+    this.logsBuffer.push({
+      message: data.message,
+      sessionId: data.situationId,
+      sessionName: data.situationName,
+      timestamp: data.timestamp,
+      type: data.type,
+    });
+  };
 
   handleSubscription = (data) => {
     let { type } = data;

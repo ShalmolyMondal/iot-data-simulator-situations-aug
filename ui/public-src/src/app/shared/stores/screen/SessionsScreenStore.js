@@ -57,19 +57,18 @@ export default class SessionsScreenStore {
 
   @computed get logs() {
     let logs = this.appStore.sessionsStore.logs;
-
+    // console.log(logs);
     if (this.sessionsFilter && this.sessionsFilter.length) {
       logs = logs.filter((log) => {
         return this.sessionsFilter.indexOf(log.sessionId) !== -1;
       });
     }
-
     if (this.typeFilter && this.typeFilter.length) {
       logs = logs.filter((log) => {
         return this.typeFilter.indexOf(log.type) !== -1;
       });
     }
-
+    console.log(logs);
     return logs;
   }
 

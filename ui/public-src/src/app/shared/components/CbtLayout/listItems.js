@@ -13,32 +13,44 @@ import DvrIcon from '@material-ui/icons/Dvr';
 import { FAKE_DATA } from '../../constants/fakeData';
 import ViewStore from '../../stores/ViewStore';
 // import FAKE_DATA from '../../constants/fakeData';
+import './cbtLayout.css';
 
 export const mainListItems = (props, situations) => {
-
-  return <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
-    <ListSubheader inset>Situations</ListSubheader>
-    {
-      situations && situations.map((situation, key) => {
-        return (
-          <ListItem button key={key} onClick={() => props.store.view.openSituationDetailPage(situation._id)}>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary={situation.situation_name} />
-          </ListItem>
-        )
-      })
-    }
-  </div>
+  return (
+    <div style={{ maxHeight: '300px', overflowY: 'scroll' }}>
+      <ListSubheader inset>Situations</ListSubheader>
+      {situations &&
+        situations.map((situation, key) => {
+          return (
+            <ListItem
+              button
+              key={key}
+              onClick={() =>
+                props.store.view.openSituationDetailPage(situation._id)
+              }
+            >
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText
+                className="list-item-text"
+                primary={situation.situation_name}
+              />
+            </ListItem>
+          );
+        })}
+    </div>
+  );
 };
 
 export const secondaryListItems = (props, callback) => {
   return (
-
     <div>
       <ListSubheader inset>Actions</ListSubheader>
-      <ListItem button onClick={() => props.store.view.openSituationManagePage()}>
+      <ListItem
+        button
+        onClick={() => props.store.view.openSituationManagePage()}
+      >
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
@@ -57,5 +69,5 @@ export const secondaryListItems = (props, callback) => {
         <ListItemText primary="Run Simulation Flow" />
       </ListItem>
     </div>
-  )
+  );
 };

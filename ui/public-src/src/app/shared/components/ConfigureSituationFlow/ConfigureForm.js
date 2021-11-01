@@ -122,7 +122,7 @@ class ConfigureForm extends React.Component {
                 <Button
                   variant="contained"
                   color="secondary"
-                  onClick={(e) => this.props.closeConfigurationPanel()}
+                  onClick={(e) => this.props.closeConfigurationPanel(true)}
                 >
                   Save Configuration
                 </Button>
