@@ -4,7 +4,7 @@
   "description": "[![Join the chat at https://gitter.im/IoT-data-simulator/Lobby](https://badges.gitter.im/IoT-data-simulator/Lobby.svg)](https://gitter.im/IoT-data-simulator/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)",
   "main": "index.js",
   "scripts": {
-    "script": "docker-compose pull && docker-compose build && docker-compose up",
+    "start": "docker-compose pull && docker-compose build && docker-compose up",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
