@@ -9,9 +9,9 @@ export const AddEditSituationForm = ({ onSubmit }) => {
           <Grid container spacing={24}>
             <Grid item xs={6}>
               <TextField
-                id="situation_name"
+                id="situation_names" //changed situation_name to situation_names to see if any changes are reflected in the front end
                 required
-                label="Situation Name"
+                label="Situation Names" //changed
                 className={classes.textField}
                 value={this.state.situation_name}
                 onChange={this.handleChange('situation_name')}

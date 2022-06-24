@@ -8,7 +8,7 @@ var http = require("http");
 var bodyParser = require("body-parser");
 var compression = require("compression");
 var proxy = require("http-proxy-middleware");
-
+console.log(proxy)
 var app = express();
 var config = require('./config');
 

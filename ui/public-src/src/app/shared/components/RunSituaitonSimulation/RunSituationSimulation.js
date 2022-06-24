@@ -62,11 +62,21 @@ export default function RunSituationSimulation(props) {
       type: 'session_payload',
     });
   };
+   
+  // added to get the situation details from the create and edit situation page
+  const getSituationData = (situationId) => {
+    API.get('/situation/get/' + situationId).then((res) => {
+      const situationData = res.data; 
+      console.log("situationData", situationData);
+    });
+  }
 
   const runSimulation = () => {
     writeIntoConsole('Running Simulation...', 1, '');
     writeIntoConsole('Loading transitions configuraiton....', 1, '');
     props.transitions.map((transition, index) => {
+      getSituationData(transition.from)
+      getSituationData(transition.to)
       const timer = setTimeout(
         () => {
           writeIntoConsole(
@@ -84,6 +94,7 @@ export default function RunSituationSimulation(props) {
         1500,
         () => clearTimeout(timer)
       );
+
       const timeInterval = setTimeout(
         () => {
           writeIntoConsole(
