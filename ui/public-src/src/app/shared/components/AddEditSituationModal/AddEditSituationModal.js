@@ -240,6 +240,8 @@ class AddEditSituationModal extends React.Component {
       values: false,
       fullScreen: false,
       expanded: 1,
+      application_name: '',
+      application_description: '',
       situation_name: '',
       situation_description: '',
       weightError: [],
@@ -258,7 +260,6 @@ class AddEditSituationModal extends React.Component {
   }
 
   handleClose = (message = '') => {
-    console.log(message);
     this.setState({
       values: false,
       expanded: 1,
@@ -279,7 +280,7 @@ class AddEditSituationModal extends React.Component {
     const newCA = _.cloneDeep(this.state.context_attributes);
     const whtError = _.cloneDeep(this.state.weightError);
     newCA[index][name] = event.target.value;
-    console.log(event.target.value);
+
     if (name == 'weight' && event.target.value > 1) {
       whtError[index] = 'Weight cannot be more than 1';
     }
@@ -336,7 +337,6 @@ class AddEditSituationModal extends React.Component {
   }
 
   expandPannel = (pannelNumber) => (evt, isExpanded) => {
-    console.log(isExpanded);
     this.setState({ expanded: isExpanded ? pannelNumber : false });
   };
 
@@ -359,7 +359,6 @@ class AddEditSituationModal extends React.Component {
     ];
     const newContextAttributes = _.cloneDeep(this.state.context_attributes);
     newContextAttributes[index]['data_values'] = newDataValues;
-    console.log({ newContextAttributes });
 
     this.setState({
       context_attributes: newContextAttributes,
@@ -389,6 +388,8 @@ class AddEditSituationModal extends React.Component {
 
   handleAddEditSituation = () => {
     const situationPayload = {
+      application_name: this.state.application_name,
+      application_description: this.state.application_description,
       situation_name: this.state.situation_name,
       situation_description: this.state.situation_description,
       context_attributes: this.state.context_attributes,
@@ -403,7 +404,7 @@ class AddEditSituationModal extends React.Component {
       // API.patch('/situation/update/' + this.props.situationId, {
       //   situationData: {situationData: situationPayload},
       // }).then((res) => {
-      //   console.log(res);
+      //
       //   this.appStore.situationsManageScreenStore.load();
       //   this.handleClose("Situation Updated successfully");
       // });
@@ -415,7 +416,7 @@ class AddEditSituationModal extends React.Component {
       // API.post('/situation/create', {
       //   situationData: situationPayload,
       // }).then((res) => {
-      //   console.log(res);
+      //
       //   this.appStore.situationsManageScreenStore.load();
       //   this.handleClose("Situation created successfully");
       // });
@@ -435,7 +436,6 @@ class AddEditSituationModal extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props);
 
     return (
       <div>
@@ -459,6 +459,37 @@ class AddEditSituationModal extends React.Component {
           <DialogContent>
             <Grid className={classes.situationInfo}>
               <form className={classes.container} noValidate autoComplete="off">
+                <Card className={classes.fullWidth + ' ' + classes.card}>
+                  <CardContent>
+                    {/* <Typography variant="subheading">Situation Info</Typography> */}
+                    <Grid container spacing={24}>
+                      <Grid item xs={6}>
+                        <TextField
+                          id="application_name"
+                          required
+                          label="Application Name"
+                          className={classes.textField}
+                          value={this.state.application_name}
+                          onChange={this.handleChange('application_name')}
+                          margin="normal"
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <TextField
+                          required
+                          id="application_description"
+                          label="Application Description"
+                          className={classes.textField}
+                          value={this.state.application_description}
+                          onChange={this.handleChange(
+                            'application_description'
+                          )}
+                          margin="normal"
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
                 <Card className={classes.fullWidth + ' ' + classes.card}>
                   <CardContent>
                     {/* <Typography variant="subheading">Situation Info</Typography> */}
@@ -510,8 +541,7 @@ class AddEditSituationModal extends React.Component {
                               expandIcon={<ExpandMoreIcon />}
                             >
                               <Typography
-                                className={classes.titleText}
-                                className={classes.heading}
+                                className={`${classes.titleText} ${classes.heading}`}
                               >
                                 {ca.context_attribute_name ? (
                                   <strong>{ca.context_attribute_name}</strong>

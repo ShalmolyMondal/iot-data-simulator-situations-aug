@@ -32,7 +32,7 @@ app.use(
 
 // Connect to DB
 // 'mongodb://<db_user>:<password>@mongodb:27017/admin'
-mongoose.connect(process.env.DB_CONNECTION_URL, { useNewUrlParser: true });
+mongoose.connect(process.env.DB_CONNECTION_URL_1, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 
